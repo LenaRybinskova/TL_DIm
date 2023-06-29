@@ -1,5 +1,6 @@
-import React, {KeyboardEvent, useState} from "react";
+import React from "react";
 import {FilterValueType} from "./App";
+import {AddItemForm} from "./AddItemForm";
 
 
 export type TaskType = {
@@ -21,36 +22,18 @@ type TodoListType = {
 }
 
 export function TodoList(props: TodoListType) {
-    const [newTAskTitle, setNewTAskTitle] = useState("")
-    const [error, setError] = useState<string | null>(null) // или можно " " вместо налл
-
-    const addTask = () => {
-        if (newTAskTitle.trim() !== "" && newTAskTitle !== "kakashka") {
-            props.addTask(props.id, newTAskTitle.trim())
-            setNewTAskTitle("")
-        } else {
-            setError("title is required")
-        }
-    }
-
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewTAskTitle(e.currentTarget.value)
-    }
-
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        // при вводе в инпут сразу обнул стейт по ошибке и строка с сообщением об ошибке должна уйти
-        setError(null)
-        if (e.key === "Enter") {
-            addTask();
-        }
-    }
 
     const onAllClickHandler = () => props.changeFilter(props.id, "all")
     const onActiveClickHandler = () => props.changeFilter(props.id, "active")
     const onCompletedClickHandler = () => props.changeFilter(props.id, "completed")
-
     const onButtonRemoveTodolistHandler = () => {
         props.removeTodolist(props.id)
+    }
+
+    // функции - ОБЕРТКА конкретно для ТЛ, тк нам надо в эдТаск передать и айди и тайтл
+    const addTask = (title: string) => {
+        props.addTask(props.id, title)
+        console.log("props.id",props.id)
     }
 
     return (
@@ -58,24 +41,18 @@ export function TodoList(props: TodoListType) {
             <h3>{props.title}</h3>
             <button onClick={onButtonRemoveTodolistHandler}>x</button>
 
-            <div>
-                <input value={newTAskTitle} onChange={onChangeHandler} onKeyPress={onKeyPressHandler}
-                       className={error ? "error" : ""}/>
-                <button onClick={addTask}>+</button>
-                {error && <div className={"error-message"}>{error}</div>}
-            </div>
+            {/*инпут универсальный*/}
+            <AddItemForm addItem={addTask}/>
+
+            {/* мапятся таски */}
             <ul>
                 {props.tasks.map((el) => {
-
                         const onClickHandler = () => {
                             props.removeTask(props.id, el.id)
                         }
-
                         const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
                             props.changeTaskStatus(props.id, el.id, e.currentTarget.checked)
                         }
-
-                        // для кажд чекбокса функ для онЧенч будет своя
                         return (
                             <li key={el.id} className={el.isDone ? "is-done" : ""}>
                                 <input type="checkbox" checked={el.isDone}
@@ -86,8 +63,8 @@ export function TodoList(props: TodoListType) {
                     }
                 )
                 }
-
             </ul>
+            {/*3 кнопки фильтра*/}
             <div>
                 <button onClick={onAllClickHandler} className={props.filter === "all" ? "active-filter" : ""}>All
                 </button>
@@ -102,3 +79,4 @@ export function TodoList(props: TodoListType) {
 
     )
 }
+
