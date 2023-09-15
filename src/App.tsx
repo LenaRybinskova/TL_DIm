@@ -6,13 +6,13 @@ import {AddItemForm} from "./AddItemForm";
 
 export type FilterValueType = "all" | "completed" | "active"
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValueType
 }
-type TasksStateType={
-[key:string]: TaskType[]
+type TasksStateType = {
+    [key: string]: TaskType[]
 }
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
             {id: v1(), title: "cheese", isDone: false}
         ]
     })
+
     // функции для тасок
     const addTAsk = (todolistID: string, title: string) => {
         let newTask = {id: v1(), title: title, isDone: false}
@@ -59,11 +60,19 @@ function App() {
     const changeStatus = (todolistID: string, taskId: string, isDone: boolean) => {
         setTasks({...tasks, [todolistID]: tasks[todolistID].map(t => t.id === taskId ? {...t, isDone} : t)})
     }
+    
+    const changeTaskTitle = (todolistID: string, taskId: string, value: string) => {
+        setTasks({...tasks, [todolistID]: tasks[todolistID].map(t =>t.id ===taskId ?{...t,title:value} :t)})
+    }
+
+    const changeTodolistTitle=(todolistID: string,value: string)=>{
+        setTodoLists(todolists.map(tl =>tl.id===todolistID ?{...tl, title:value} : tl))
+    }
 
     function addTodolist(title: string) {
         // создаем тудулист
         let newTodolist: TodolistType = {id: v1(), title: title, filter: "all"}
-        setTodoLists([newTodolist,...todolists])
+        setTodoLists([newTodolist, ...todolists])
         // создаем массив тасок для него
         setTasks({...tasks, [newTodolist.id]: []})
     }
@@ -90,8 +99,11 @@ function App() {
                         changeFilter={changeFilter}
                         addTask={addTAsk}
                         changeTaskStatus={changeStatus}
+                        changeTaskTitle={changeTaskTitle}
+                        changeTodolistTitle={changeTodolistTitle}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
+
                     />
                 )
             })

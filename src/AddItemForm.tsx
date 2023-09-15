@@ -1,6 +1,7 @@
 //------------------------------------------------------------------
 // универс переиспользуемый инпут( для ТЛ он будет добавл ТЛ, внутри ТЛ он будет добавл таски - разница будет в коллбеках)
 import React, {KeyboardEvent, useState} from "react";
+import Button from '@mui/material/Button';
 
 type addItemFormPropsType = {
     addItem: ( title: string) => void
@@ -37,7 +38,7 @@ export function AddItemForm(props: addItemFormPropsType) {
                    onChange={onChangeHandler}
                    onKeyPress={onKeyPressHandler}
                    className={error ? "error" : ""}/>
-            <button onClick={addTask}>+</button>
+            <Button onClick={addTask} variant={"contained"} color={"primary"}>+</Button>
             {error && <div className={"error-message"}>{error}</div>}
         </div>
     )
