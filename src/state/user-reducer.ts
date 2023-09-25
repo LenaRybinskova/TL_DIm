@@ -1,28 +1,31 @@
-
-type  StateType={
-    age:number
+type StateType = {
+    age: number
     childrenCount: number
     name: string
 }
-
-type ActionType ={
+type ActionType = {
     type: string
-    [key: string]:any
+    [key: string]: any
 }
 
-// https://samurai.it-incubator.io/pc/video-content/watch/60b51f31f084890015872dee
-export const userReducer = (state: StateType, action: ActionType):StateType  =>
-{
+
+export const userReducer = (state: StateType, action: ActionType): StateType => {
     switch (action.type) {
         case 'INCREMENT-AGE':
-            return {...state, age: state.age+1}
+            let newState = {...state};
+            newState.age = state.age + 1;
+            return newState;
         case 'INCREMENT-CHILDREN-COUNT':
-            return {...state, childrenCount: state.childrenCount +1}
+            return {
+                ...state,
+                childrenCount: state.childrenCount + 1
+            }
         case 'CHANGE-NAME':
-            return {...state, name: action.newName}
-
+            return {
+                ...state,
+                name: action.newName
+            }
         default:
-            throw new Error('I don\'t understand this type')
+            throw new Error("I don't understand this action type")
     }
-
 }

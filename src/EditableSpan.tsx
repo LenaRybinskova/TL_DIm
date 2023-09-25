@@ -1,35 +1,29 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useState} from 'react';
+import {TextField} from "@mui/material";
 
-type EditableSpanTypE = {
-    title: string
-    onChange: (newValue:string) => void
+
+type EditableSpanPropsType = {
+    value: string
+    onChange: (newValue: string) => void
 }
-//Режим регулироваки (editeMode) мы сделаем в локальном стейте, тк это не особо выжнный момент
-// и на БЛЛ (глоб стейт данных) не влияет
 
-export function EditableSpan(props: EditableSpanTypE) {
-
-    let [editeMode, setEditeMode] = useState(false)
-    let [localTitle, setLocalTitle] = useState("") // или props.title
+export function EditableSpan(props: EditableSpanPropsType) {
+    let [editMode, setEditMode] = useState(false);
+    let [title, setTitle] = useState(props.value);
 
     const activateEditMode = () => {
-        setEditeMode(true)
-        // когда щелкнули сразу стейт обновится и подтянет ту стрингу которая изначально была
-        setLocalTitle(props.title)
-    };
+        setEditMode(true);
+        setTitle(props.value);
+    }
     const activateViewMode = () => {
-        setEditeMode(false)
-        // сработал блюр, значит надо все нововведеное сохранить и передать родителю
-        props.onChange(localTitle);
-    };
-    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setLocalTitle(e.currentTarget.value)
+        setEditMode(false);
+        props.onChange(title);
+    }
+    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
     }
 
-    return (
-        editeMode
-            ? <input value={localTitle} onChange={onChangeTitleHandler} onBlur={activateViewMode} autoFocus/>
-            : <span onDoubleClick={activateEditMode}>{props.title}</span>
-
-    )
+    return editMode
+        ?    <TextField value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode} />
+        : <span onDoubleClick={activateEditMode}>{props.value}</span>
 }

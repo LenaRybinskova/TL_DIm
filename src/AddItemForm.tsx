@@ -1,45 +1,51 @@
-//------------------------------------------------------------------
-// универс переиспользуемый инпут( для ТЛ он будет добавл ТЛ, внутри ТЛ он будет добавл таски - разница будет в коллбеках)
-import React, {KeyboardEvent, useState} from "react";
-import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField/TextField';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton} from "@mui/material";
+import {AddBox} from "@mui/icons-material";
 
-type addItemFormPropsType = {
-    addItem: ( title: string) => void
+type AddItemFormPropsType = {
+    addItem: (title: string) => void
 }
 
-export function AddItemForm(props: addItemFormPropsType) {
-    const [newTAskTitle, setNewTAskTitle] = useState("")
-    const [error, setError] = useState<string | null>(null) // или можно " " вместо налл
+export function AddItemForm(props: AddItemFormPropsType) {
+    console.log("AddItemForm вызван")
+    let [title, setTitle] = useState("")
+    let [error, setError] = useState<string | null>(null)
 
-    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNewTAskTitle(e.currentTarget.value)
+    const addItem = () => {
+        if (title.trim() !== "") {
+            props.addItem(title);
+            setTitle("");
+        } else {
+            setError("Title is required");
+        }
+    }
+
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
     }
 
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        // при вводе в инпут сразу обнул стейт по ошибке и строка с сообщением об ошибке должна уйти
-        setError(null)
-        if (e.key === "Enter") {
-            addTask();
+        if(error !==null) {
+            setError(null)
+        }
+        setError(null);
+        if (e.charCode === 13) {
+            addItem();
         }
     }
 
-    const addTask = () => {
-        if (newTAskTitle.trim() !== "" && newTAskTitle !== "kakashka") {
-            props.addItem(newTAskTitle.trim())
-            setNewTAskTitle("")
-        } else {
-            setError("title is required")
-        }
-    }
-
-    return (
-        <div>
-            <input value={newTAskTitle}
+    return <div>
+        <TextField variant="outlined"
+                   error={!!error}
+                   value={title}
                    onChange={onChangeHandler}
                    onKeyPress={onKeyPressHandler}
-                   className={error ? "error" : ""}/>
-            <Button onClick={addTask} variant={"contained"} color={"primary"}>+</Button>
-            {error && <div className={"error-message"}>{error}</div>}
-        </div>
-    )
+                   label="Title"
+                   helperText={error}
+        />
+        <IconButton color="primary" onClick={addItem}>
+            <AddBox />
+        </IconButton>
+    </div>
 }
