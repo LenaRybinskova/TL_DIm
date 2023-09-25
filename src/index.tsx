@@ -4,7 +4,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from 'react-redux';
 import AppWithRedux from './AppWithRedux';
-import {store} from './store/store';
+import {store} from './store';
+import App from './App';
 
 
 const root = ReactDOM.createRoot(
@@ -12,7 +13,8 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(<Provider store={store}>
-<AppWithRedux/>
+{/*<AppWithRedux/>*/}
+    <App/>
     </Provider>
 )
 ;

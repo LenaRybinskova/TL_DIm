@@ -12,7 +12,8 @@ import {
 } from './state/todolists-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {RootStateType} from './store/store';
+import {RootStateType} from './store';
+import {TodoListWithRedux} from './TodoListWithRedux';
 
 export type FilterValueType = 'all' | 'completed' | 'active'
 export type TodolistType = {
@@ -27,7 +28,7 @@ export type TasksStateType = {
 function AppWithRedux() {
 
     const todolists = useSelector<RootStateType, TodolistType[]>(state => state.todolists) // выбираем из глоб стейта (AppRootState) нужную нам часть (TodolistType)
-    const tasks = useSelector<RootStateType, TasksStateType>(state => state.tasks) // выбираем из глоб стейта (AppRootState) нужную нам часть с таксками
+/*    const tasks = useSelector<RootStateType, TasksStateType>(state => state.tasks) // выбираем из глоб стейта (AppRootState) нужную нам часть с таксками*/
     const dispatch = useDispatch() // эта функ заменяет отдельные диспатчи кот были из юзРедьюсора. Она из библ Реакт-Редакс
 
     /*    let todoList1 = v1();
@@ -95,7 +96,6 @@ function AppWithRedux() {
         /*        setTasks({...tasks, [todolistID]: tasks[todolistID].map(t =>t.id ===taskId ?{...t,title:value} :t)})*/
     }
 
-
 // для тудулистов
     function removeTodolist(todolistID: string) {
         const action = removeTodolistAC(todolistID)
@@ -111,7 +111,6 @@ function AppWithRedux() {
 /*        dispatchTodoLists(changeTodolistFilterAC(todolistID, value))*/
         /*        setTodoLists(todolists.map(tl => tl.id === todolistID ? {...tl, filter: value} : tl))*/
     }
-
 
     const changeTodolistTitle = (todolistID: string, value: string) => {
         dispatch(changeTodolistTitleAC(todolistID, value))
@@ -133,20 +132,20 @@ function AppWithRedux() {
                 setTasks({...tasks, [newTodolist.id]: []})*/
     }
 
+
     return (
         <div className="App">
             <AddItemForm addItem={addTodolist}/>
             {todolists.map((tl) => {
-                let tasksForTodolist = tasks[tl.id]
+                /*let tasksForTodolist = tasks[tl.id]
                 if (tl.filter === 'completed') {
                     tasksForTodolist = tasks[tl.id].filter((t) => t.isDone)
                 }
                 if (tl.filter === 'active') {
                     tasksForTodolist = tasks[tl.id].filter((t) => !t.isDone)
-                }
+                }*/
                 return (
-
-                    <TodoList
+                /*    <TodoList
                         key={tl.id}
                         id={tl.id}
                         title={tl.title}
@@ -159,8 +158,8 @@ function AppWithRedux() {
                         changeTodolistTitle={changeTodolistTitle}
                         filter={tl.filter}
                         removeTodolist={removeTodolist}
-
-                    />
+                    />*/
+                    <TodoListWithRedux todolist={tl}/>
                 )
             })
             }

@@ -1,5 +1,5 @@
-import {todolistsReducer} from '../state/todolists-reducer';
-import {tasksReducer} from '../state/tasks-reducer';
+import {todolistsReducer} from './state/todolists-reducer';
+import {tasksReducer} from './state/tasks-reducer';
 import {combineReducers, createStore} from 'redux';
 
 
@@ -12,6 +12,7 @@ const rootReducer = combineReducers({
         tasks: tasksReducer
     }
 )
+
 export type RootStateType = ReturnType<typeof rootReducer>
 
 export const store = createStore(rootReducer)
