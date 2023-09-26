@@ -1,3 +1,16 @@
+# 11 useCallBack, React.memo()
+
+Каждую комп оборачиваем в React.memo(), компон из styled-component уже обернуты
+
+Если передаем в компон callback - обернуть в useCallBack передаваемый коллбек ( в род компон)
+
+Хуки внутри мар() нельзя использовать, поэтому то что мапится нужно вынести в отдельную компоненту
+
+# 10 App с использование Redux (react-redux)
+
+yarn add redux react-redux
+
+
 # 10: App c использованием useReducer
 
 ВАЖНО:
@@ -13,8 +26,8 @@ function addTodolist(title: string) {
     }
 ```
 
-# 10 App с использование Redux (react-redux)
 
-yarn add redux react-redux
+
+
 
 
