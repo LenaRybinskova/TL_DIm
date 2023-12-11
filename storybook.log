@@ -1,0 +1,26 @@
+yarn add v1.22.19
+[1/4] Resolving packages...
+warning @storybook/react-webpack5 > @storybook/builder-webpack5 > fork-ts-checker-webpack-plugin > memfs@3.6.0: this will be v4
+warning @storybook/react-webpack5 > @storybook/builder-webpack5 > webpack-dev-middleware > memfs@3.6.0: this will be v4
+[2/4] Fetching packages...
+[3/4] Linking dependencies...
+warning "@emotion/react > @emotion/babel-plugin@11.10.2" has unmet peer dependency "@babel/core@^7.0.0".
+warning "@emotion/react > @emotion/babel-plugin > @babel/plugin-syntax-jsx@7.18.6" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning " > @testing-library/user-event@14.4.3" has unmet peer dependency "@testing-library/dom@>=7.21.4".
+warning "react-scripts > eslint-config-react-app > eslint-plugin-flowtype@8.0.3" has unmet peer dependency "@babel/plugin-syntax-flow@^7.14.5".
+warning "react-scripts > eslint-config-react-app > eslint-plugin-flowtype@8.0.3" has unmet peer dependency "@babel/plugin-transform-react-jsx@^7.14.9".
+warning " > styled-components@5.3.6" has unmet peer dependency "react-is@>= 16.8.0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-flow@7.23.3" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-react@7.23.3" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "@storybook/preset-create-react-app > @pmmmwh/react-refresh-webpack-plugin@0.5.11" has unmet peer dependency "react-refresh@>=0.10.0 <1.0.0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-react > @babel/plugin-transform-react-display-name@7.23.3" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-react > @babel/plugin-transform-react-jsx@7.23.4" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-react > @babel/plugin-transform-react-jsx-development@7.22.5" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning "@storybook/react-webpack5 > @storybook/preset-react-webpack > @babel/preset-react > @babel/plugin-transform-react-pure-annotations@7.23.3" has unmet peer dependency "@babel/core@^7.0.0-0".
+warning " > @storybook/preset-create-react-app@7.6.4" has unmet peer dependency "@babel/core@*".
+warning "eslint-plugin-storybook > @typescript-eslint/utils@5.62.0" has unmet peer dependency "eslint@^6.0.0 || ^7.0.0 || ^8.0.0".
+warning "eslint-plugin-storybook > @typescript-eslint/utils > @eslint-community/eslint-utils@4.4.0" has unmet peer dependency "eslint@^6.0.0 || ^7.0.0 || >=8.0.0".
+warning " > eslint-plugin-storybook@0.6.15" has unmet peer dependency "eslint@>=6".
+error An unexpected error occurred: "EPERM: operation not permitted, copyfile 'C:\\Users\\Alex\\AppData\\Local\\Yarn\\Cache\\v6\\npm-@pmmmwh-react-refresh-webpack-plugin-0.5.11-7c2268cedaa0644d677e8c4f377bc8fb304f714a-integrity\\node_modules\\@pmmmwh\\react-refresh-webpack-plugin\\client\\ReactRefreshEntry.js' -> 'C:\\Users\\Alex\\Documents\\Lena\\IT_INCUBATOR\\TodoList_Dim\\TL_DIm\\node_modules\\@pmmmwh\\react-refresh-webpack-plugin\\client\\ReactRefreshEntry.js'".
+info If you think this is a bug, please open a bug report with the information provided in "C:\\Users\\Alex\\Documents\\Lena\\IT_INCUBATOR\\TodoList_Dim\\TL_DIm\\yarn-error.log".
+info Visit https://yarnpkg.com/en/docs/cli/add for documentation about this command.

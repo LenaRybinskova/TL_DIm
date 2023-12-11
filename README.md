@@ -1,3 +1,47 @@
+# 12 Storybook
+
+```
+npx storybook@latest init
+```
+
+npx sb init не ставила, выдает ошибку babelOption
+
+storybook запускает отдельный свой сервер
+
+если ошибка установки, почистить кэш npm (-- force значит принудительно)
+
+```
+npx cache clear -- force
+```
+
+если опять ошибка - удалить node_modules и yarn.lock
+
+```
+yarn install
+```
+
+переоткрыть webshtorm.
+
+поменять порт на 9009 "storybook": "storybook dev -p 9009"
+
+Декоратор - это функция, по сути схожа с ХОК коннект,обертка со Стором,которая принимает др функцию(историю) и вызывает
+ее.
+Чтобы не делать такую обертку для каждой истории, есть концепция декораторов.
+
+```
+yarn add @storybook/addon-storysource --dev
+```
+
+для ui тестирования
+```
+yarn add puppeteer jest-puppeteer jest-image-snapshot start-server-and-test --dev
+```
+добавить скрипты
+
+"jest:integration": "jest -c integration/jest.config.js",
+"test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+
+
 # 11 useCallBack, React.memo()
 
 Каждую комп оборачиваем в React.memo(), компон из styled-component уже обернуты
