@@ -1,3 +1,34 @@
+# 13 snapshot
+
+```
+yarn add puppeteer jest-puppeteer jest-image-snapshot start-server-and-test jest jest-environment-jsdom --dev
+📋
+```
+```
+"jest:integration": "jest -c integration/jest.config.js",
+"test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+📋
+```
+
+создать integration папку с файлами setupTests.js
+```
+const { toMatchImageSnapshot } = require('jest-image-snapshot');
+
+expect.extend({ toMatchImageSnapshot });
+```
+и jest.config.js
+
+```
+ module.exports = {
+   preset: 'jest-puppeteer',
+   testRegex: './*\\.test\\.js$',
+   setupFilesAfterEnv: ['./setupTests.js']
+};
+```
+```
+yarn run jest:integration --updateSnapshot  обновить эталонный вид
+```
+
 # 12 Storybook
 
 ```
