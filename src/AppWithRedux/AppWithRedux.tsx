@@ -1,21 +1,10 @@
 import React, {useCallback, useReducer, useState} from 'react';
-import './App.css';
-
-import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm';
-import {
-    addTodolistAC,
-    changeTodolistFilterAC,
-    changeTodolistTitleAC,
-    removeTodolistAC,
-    todolistsReducer
-} from './state/todolists-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from './state/store';
+import '../App.css';
+import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
-import {TaskType, Todolist} from './TodoList';
+import {TaskType, Todolist} from '../TodoList';
+import {useAppWIthRedux} from './hooks/useAppWithRedux';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistType = {
@@ -23,14 +12,15 @@ export type TodolistType = {
     title: string
     filter: FilterValuesType
 }
-
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
 
 function AppWithRedux() {
-    console.log('App вызвана')
+    const {todolists, addTodolist, tasks,removeTask,changeFilter,addTask,changeStatus,removeTodolist,changeTaskTitle,changeTodolistTitle} = useAppWIthRedux()
+
+    /*console.log('App вызвана')
     let todolistId1 = v1();
     let todolistId2 = v1();
 
@@ -77,8 +67,7 @@ function AppWithRedux() {
     const addTodolist = useCallback((title: string) => {
         const action = addTodolistAC(title);
         dispatch(action);
-    }, [dispatch])
-
+    }, [dispatch])*/
     return (
         <div className="App">
             <AppBar position="static">
@@ -101,8 +90,6 @@ function AppWithRedux() {
                         todolists.map(tl => {
                             let allTodolistTasks = tasks[tl.id];
                             let tasksForTodolist = allTodolistTasks;
-
-
 
                             return <Grid item key={tl.id}>
                                 <Paper style={{padding: '10px'}}>

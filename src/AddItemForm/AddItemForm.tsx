@@ -1,14 +1,17 @@
 import TextField from '@mui/material/TextField/TextField';
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React from 'react';
 import {IconButton} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
+import {useAddItemForm} from './hooks/useAddItemForm';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
+
+
 // обернули в контейн компоненту
 export const AddItemForm=React.memo((props: AddItemFormPropsType)=>{
-    console.log("AddItemForm вызван")
+  /*  console.log("AddItemForm вызван")
     let [title, setTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
@@ -34,6 +37,8 @@ export const AddItemForm=React.memo((props: AddItemFormPropsType)=>{
             addItem();
         }
     }
+*/
+const {title,onKeyPressHandler,onChangeHandler,addItem,error}=useAddItemForm(props.addItem)
 
     return <div>
         <TextField variant="outlined"
