@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-
+// withCredentials: true означает, что включена передача куков
 const settings = {
     withCredentials: true,
     headers: {
@@ -44,7 +44,6 @@ type ResponseType<D = {}> = {
     messages: string[],
     data: D
 }
-
 type GetTaskResponseType = {
     error: string | null,
     totalCount: number,
@@ -106,7 +105,7 @@ export const todolistsAPI = {
         return promise
     },
     updateTaskTodolist(todolistId: string, taskId: string, model: UpdateTaskModelType) {
-        const promise = instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, {...model})
+        const promise = instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
 console.log(promise)
         return promise
     },
