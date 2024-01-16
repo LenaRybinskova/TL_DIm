@@ -2,6 +2,8 @@ import axios from 'axios';
 
 
 // withCredentials: true означает, что включена передача куков
+
+
 const settings = {
     withCredentials: true,
     headers: {
@@ -22,23 +24,6 @@ export type TodolistType = {
     order: number
 }
 
-/*//одинаковые типы, разница только в data
-type CreateTodolistResponseType =
-    {
-        resultCode: number
-        messages: string[],
-        data: {
-            item: TodolistType
-        }
-    }
-
-//одинаковые типы, разница только в data
-type DeleteUpdateTodolistResponseType =
-    {
-        resultCode: number
-        messages: string[],
-        data: {}
-    }*/
 type ResponseType<D = {}> = {
     resultCode: number
     messages: string[],
@@ -49,12 +34,27 @@ type GetTaskResponseType = {
     totalCount: number,
     items: TaskType[]
 }
+
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed,
+    Draft
+}
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi,
+    Ungently,
+    Later = 4
+}
+
 export type TaskType = {
     description: string
     title: string
-    completed: boolean
-    status: number
-    priority: number
+    status: TaskStatuses
+    priority: TaskPriorities
     startDate: string
     deadline: string
     id: string
@@ -79,7 +79,6 @@ export const todolistsAPI = {
     },
     createTodolist(title: string) {
         return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title: title})
-
     },
     deleteTodolist(id: string) {
         return instance.delete<ResponseType<{ item: {} }>>(`todo-lists/${id}`)
@@ -87,11 +86,6 @@ export const todolistsAPI = {
     updateTodolist(id: string, title: string) {
         return instance.put<ResponseType<{ item: {} }>>(`todo-lists/${id}`, {title: title})
     },
-
-    /*    getTasksTodolist(todolistId: string) {
-            const promise = axios.get<GetTaskResponseType>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${todolistId}/tasks`, settings)
-            return promise
-        },*/
     getTasksTodolist(todolistId: string) {
         const promise = instance.get<GetTaskResponseType>(`todo-lists/${todolistId}/tasks`)
         return promise
@@ -106,7 +100,7 @@ export const todolistsAPI = {
     },
     updateTaskTodolist(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         const promise = instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
-console.log(promise)
+        console.log(promise)
         return promise
     },
 }
