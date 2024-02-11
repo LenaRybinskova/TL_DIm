@@ -1,19 +1,20 @@
 import {v1} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../state/tasks-reducer';
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC,
+    changeTodolistTitleAC, fetchTodolistTC,
     FilterValuesType,
     removeTodolistAC, TodolistDomainType
 } from '../../state/todolists-reducer';
 import {TasksStateType} from '../AppWithRedux';
-import {TaskStatuses, TodolistType} from '../../api/todolists-api';
+import {TaskStatuses, todolistsAPI, TodolistType} from '../../api/todolists-api';
+import {ThunkDispatch} from 'redux-thunk';
 
-export const useAppWIthRedux=()=>{
+export const useAppWIthRedux = () => {
 
     console.log('App вызвана')
     let todolistId1 = v1();
@@ -21,42 +22,46 @@ export const useAppWIthRedux=()=>{
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const dispatch = useDispatch();
+    const dispatch: ThunkDispatch<AppRootStateType, any, any> =   useDispatch()
 
-    const removeTask=useCallback((id: string, todolistId: string) =>{
+    useEffect(() => {
+        dispatch(fetchTodolistTC())
+    }, [])
+
+    const removeTask = useCallback((id: string, todolistId: string) => {
         const action = removeTaskAC(id, todolistId);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const addTask=useCallback((title: string, todolistId: string)=> {
+    const addTask = useCallback((title: string, todolistId: string) => {
         const action = addTaskAC(title, todolistId);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const changeStatus=useCallback((id: string, status:TaskStatuses, todolistId: string) =>{
+    const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
         const action = changeTaskStatusAC(id, status, todolistId);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const changeTaskTitle=useCallback((id: string, newTitle: string, todolistId: string)=>{
+    const changeTaskTitle = useCallback((id: string, newTitle: string, todolistId: string) => {
         const action = changeTaskTitleAC(id, newTitle, todolistId);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const changeFilter=useCallback((value: FilterValuesType, todolistId: string)=>{
+    const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
         const action = changeTodolistFilterAC(todolistId, value);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const removeTodolist=useCallback((id: string)=> {
+    const removeTodolist = useCallback((id: string) => {
         const action = removeTodolistAC(id);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
-    const changeTodolistTitle=useCallback((id: string, title: string)=> {
+    const changeTodolistTitle = useCallback((id: string, title: string) => {
         const action = changeTodolistTitleAC(id, title);
         dispatch(action);
-    },[dispatch])
+    }, [dispatch])
 
     //обернули в хук тк это коллбек компоненты AddItemForm
     const addTodolist = useCallback((title: string) => {
@@ -65,5 +70,16 @@ export const useAppWIthRedux=()=>{
     }, [dispatch])
 
 
-    return {todolists, addTodolist,tasks,removeTask,changeFilter,addTask,changeStatus,removeTodolist,changeTaskTitle,changeTodolistTitle}
+    return {
+        todolists,
+        addTodolist,
+        tasks,
+        removeTask,
+        changeFilter,
+        addTask,
+        changeStatus,
+        removeTodolist,
+        changeTaskTitle,
+        changeTodolistTitle
+    }
 }

@@ -10,7 +10,7 @@ const settings = {
         'API-KEY': ''
     }
 }
-//экз класса Аксиос
+
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
     ...settings

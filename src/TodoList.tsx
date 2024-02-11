@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from './AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan';
 import {Button, IconButton} from '@mui/material';
@@ -6,6 +6,10 @@ import {Delete} from '@mui/icons-material';
 import {Task} from './Task';
 import {TaskStatuses, TaskType} from './api/todolists-api';
 import {FilterValuesType} from './state/todolists-reducer';
+import {ThunkDispatch} from 'redux-thunk';
+import {AppRootStateType} from './state/store';
+import {useDispatch} from 'react-redux';
+import {fetchTasksTC} from './state/tasks-reducer';
 
 
 type PropsType = {
@@ -19,7 +23,7 @@ type PropsType = {
     filter: FilterValuesType
     /*будем прокидывать для компоненты Task*/
     removeTask: (taskId: string, todolistId: string) => void
-    changeTaskStatus: (id: string, status:TaskStatuses, todolistId: string) => void
+    changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void
     changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void
 
 }
@@ -27,6 +31,11 @@ type PropsType = {
 export const Todolist = React.memo((props: PropsType) => {
     console.log('Тудулист вызван')
 
+    const dispatch: ThunkDispatch<AppRootStateType, any, any> =   useDispatch()
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(props.id))
+    }, [])
 
     //обернули в хук тк это коллбек компоненты AddItemForm
     const addTask = useCallback((title: string) => {
