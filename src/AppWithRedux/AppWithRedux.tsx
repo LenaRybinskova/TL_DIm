@@ -1,4 +1,4 @@
-import React, {useCallback, useReducer, useState} from 'react';
+import React from 'react';
 import '../App.css';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
@@ -6,7 +6,6 @@ import {Menu} from '@mui/icons-material';
 import {useAppWIthRedux} from './hooks/useAppWithRedux';
 import {TaskType} from '../api/todolists-api';
 import {Todolist} from '../TodoList';
-import {TodolistDomainType} from '../state/todolists-reducer';
 
 
 export type TasksStateType = {

@@ -9,10 +9,10 @@ import {
     removeTodolistAC,
     todolistsReducer
 } from './state/todolists-reducer';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
-import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
-import {Menu} from "@mui/icons-material";
-import { Todolist} from './TodoList';
+import {addTaskAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
+import {Menu} from '@mui/icons-material';
+import {Todolist} from './TodoList';
 import {TaskPriorities, TaskStatuses, TaskType} from './api/todolists-api';
 
 type FilterValuesType = "all" | "active" | "completed";
@@ -49,19 +49,19 @@ function AppWithReducers() {
     }
 
     function addTask(title: string, todolistId: string) {
-        const action = addTaskAC(title, todolistId);
+        const action = addTaskAC({id: "id-exist", title: title, status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",order:0,addedDate:"",todoListId:todolistId});
         dispatchToTasks(action);
     }
 
-    function changeStatus(id: string, status:TaskStatuses, todolistId: string) {
-        const action = changeTaskStatusAC(id, status, todolistId);
+/*    function changeStatus(id: string, status:TaskStatuses, todolistId: string) {
+        const action = updateTaskAC(id, status, todolistId);
         dispatchToTasks(action);
     }
 
     function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
         const action = changeTaskTitleAC(id, newTitle, todolistId);
         dispatchToTasks(action);
-    }
+    }*/
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
         const action = changeTodolistFilterAC(todolistId, value);
@@ -80,7 +80,7 @@ function AppWithReducers() {
     }
 
     function addTodolist(title: string) {
-        const action = addTodolistAC(title);
+        const action = addTodolistAC({id: v1(), title: title, addedDate:"", order:0});
         dispatchToTasks(action);
         dispatchToTodolists(action);
     }
@@ -117,7 +117,7 @@ function AppWithReducers() {
 
                             return <Grid key={tl.id} item>
                                 <Paper style={{padding: "10px"}}>
-                                    <Todolist
+    {/*                                <Todolist
                                         key={tl.id}
                                         id={tl.id}
                                         title={tl.title}
@@ -130,7 +130,7 @@ function AppWithReducers() {
                                         removeTodolist={removeTodolist}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodolistTitle={changeTodolistTitle}
-                                    />
+                                    />*/}
                                 </Paper>
                             </Grid>
                         })

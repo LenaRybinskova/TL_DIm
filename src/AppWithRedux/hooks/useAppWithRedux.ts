@@ -2,16 +2,18 @@ import {v1} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../../state/store';
 import {useCallback, useEffect} from 'react';
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from '../../state/tasks-reducer';
+import {addTaskTC, removeTaskTC, updateTaskTC} from '../../state/tasks-reducer';
 import {
-    addTodolistAC,
+    addTodolistTC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, fetchTodolistTC,
+    changeTodolistTitleTC,
+    fetchTodolistTC,
     FilterValuesType,
-    removeTodolistAC, TodolistDomainType
+    removeTodolistTC,
+    TodolistDomainType
 } from '../../state/todolists-reducer';
 import {TasksStateType} from '../AppWithRedux';
-import {TaskStatuses, todolistsAPI, TodolistType} from '../../api/todolists-api';
+import {TaskStatuses} from '../../api/todolists-api';
 import {ThunkDispatch} from 'redux-thunk';
 
 export const useAppWIthRedux = () => {
@@ -22,30 +24,27 @@ export const useAppWIthRedux = () => {
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
-    const dispatch: ThunkDispatch<AppRootStateType, any, any> =   useDispatch()
+    const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()
 
     useEffect(() => {
         dispatch(fetchTodolistTC())
     }, [])
 
-    const removeTask = useCallback((id: string, todolistId: string) => {
-        const action = removeTaskAC(id, todolistId);
-        dispatch(action);
-    }, [dispatch])
-
-    const addTask = useCallback((title: string, todolistId: string) => {
-        const action = addTaskAC(title, todolistId);
-        dispatch(action);
-    }, [dispatch])
-
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
-        const action = changeTaskStatusAC(id, status, todolistId);
-        dispatch(action);
+        /*        const action = changeTaskStatusAC(id, status, todolistId);*/
+        dispatch(updateTaskTC(id, {status:status}, todolistId));
     }, [dispatch])
 
     const changeTaskTitle = useCallback((id: string, newTitle: string, todolistId: string) => {
-        const action = changeTaskTitleAC(id, newTitle, todolistId);
-        dispatch(action);
+        dispatch(updateTaskTC(id, {title:newTitle}, todolistId));
+    }, [dispatch])
+
+    const removeTask = useCallback((id: string, todolistId: string) => {
+        dispatch(removeTaskTC(todolistId, id))
+    }, [dispatch])
+
+    const addTask = useCallback((title: string, todolistId: string) => {
+        dispatch(addTaskTC(todolistId, title))
     }, [dispatch])
 
     const changeFilter = useCallback((value: FilterValuesType, todolistId: string) => {
@@ -54,19 +53,19 @@ export const useAppWIthRedux = () => {
     }, [dispatch])
 
     const removeTodolist = useCallback((id: string) => {
-        const action = removeTodolistAC(id);
-        dispatch(action);
+        /*        const action = removeTodolistAC(id);*/
+        dispatch(removeTodolistTC(id));
     }, [dispatch])
 
     const changeTodolistTitle = useCallback((id: string, title: string) => {
-        const action = changeTodolistTitleAC(id, title);
-        dispatch(action);
+        /*        const action = changeTodolistTitleAC(id, title);*/
+        dispatch(changeTodolistTitleTC(id, title));
     }, [dispatch])
 
     //обернули в хук тк это коллбек компоненты AddItemForm
     const addTodolist = useCallback((title: string) => {
-        const action = addTodolistAC(title);
-        dispatch(action);
+        /*        const action = addTodolistAC(title);*/
+        dispatch(addTodolistTC(title));
     }, [dispatch])
 
 
