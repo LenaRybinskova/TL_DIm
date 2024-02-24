@@ -1,18 +1,18 @@
  import type {Meta, StoryObj}   from  '@storybook/react';
- import AppWithRedux from './AppWithRedux/AppWithRedux';
- import {ReduxStoreProviderDecorator} from './stories/ReduxStoreProviderDecorator';
+ import App from './App';
+ import {ReduxStoreProviderDecorator} from '../stories/ReduxStoreProviderDecorator';
 
 
 
-const  meta: Meta<  typeof  AppWithRedux> = {
-    title:   'TODOLISTS/AppWithRedux',
-    component:   AppWithRedux,
+const  meta: Meta<  typeof  App> = {
+    title:   'TODOLISTS/App',
+    component:   App,
     tags: [  'autodocs'],
     decorators: [ReduxStoreProviderDecorator]
 };
 
 export default  meta;
-type Story = StoryObj<  typeof  AppWithRedux>;
+type Story = StoryObj<  typeof  App>;
 
 export const  AppWithReduxStory: Story = {}
 
@@ -24,13 +24,13 @@ export const  AppWithReduxStory: Story = {}
 // старый вариант написания
 /*
 import {Meta, Story} from '@storybook/react';
-import AppWithRedux from './AppWithRedux';
+import App from './App';
 import {ReduxStoreProviderDecorator} from './stories/decorators/ReduxStoreProviderDecorator';
 
 
 const meta: Meta = {
-    title: 'TODOLIST/AppWithRedux',
-    component: AppWithRedux,
+    title: 'TODOLIST/App',
+    component: App,
     parameters: {
         layout: 'centered',
     },
@@ -38,7 +38,7 @@ const meta: Meta = {
 };
 export default meta;
 
-const Template: Story = () => <AppWithRedux />;
+const Template: Story = () => <App />;
 
 // история
 export const BaseExampleAppWithRedux = Template.bind({})

@@ -2,7 +2,7 @@
 import {useState} from 'react';
 import {todolistId1, todolistId2} from '../id-utils';
 import {v1} from 'uuid';
-import {FilterValuesType, TodolistDomainType} from '../../state/todolists-reducer';
+import {FilterValuesType, TodolistDomainType} from '../../../../features/Todolists/todolists-reducer';
 
 //кастомный хук
 export function useTodolists(onTodolistRemove:(id:string)=>void, onTodolistAdded:(newTodolistId:string)=>void) {

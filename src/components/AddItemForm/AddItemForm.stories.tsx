@@ -1,5 +1,5 @@
 import type {Meta, StoryObj} from '@storybook/react';
-import {AddItemForm} from './AddItemForm/AddItemForm';
+import {AddItemForm} from './AddItemForm';
 import {action} from '@storybook/addon-actions'
 
 

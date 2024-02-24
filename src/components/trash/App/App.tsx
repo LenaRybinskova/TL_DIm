@@ -1,19 +1,34 @@
 import React from 'react';
-import '../App.css';
-import {AddItemForm} from '../AddItemForm/AddItemForm';
+import '../../../app/App.css';
+import {AddItemForm} from '../../AddItemForm/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
-import {useAppWIthRedux} from './hooks/useAppWithRedux';
-import {TaskType} from '../api/todolists-api';
-import {Todolist} from '../TodoList';
+import {Todolist} from '../../../features/Todolists/Todolist/TodoList';
+import {useTodolists} from './hooks/useTodolists';
+import {useTasks} from './hooks/useTasks';
+import {TaskStatuses} from '../../../api/todolists-api';
 
 
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
-}
+function App() {
 
-function AppWithRedux() {
-    const {todolists, addTodolist, tasks,removeTask,changeFilter,addTask,changeStatus,removeTodolist,changeTaskTitle,changeTodolistTitle} = useAppWIthRedux()
+    let {
+        tasks,
+        removeTask,
+        addTask,
+        changeStatus,
+        changeTaskTitle,
+        completelyRemoveTasksForTodolists,
+        createTaskForTodolists
+    } = useTasks()
+
+
+    let {
+        todolists,
+        changeFilter,
+        removeTodolist,
+        changeTodolistTitle,
+        addTodolist
+    } = useTodolists(completelyRemoveTasksForTodolists, createTaskForTodolists)
 
     return (
         <div className="App">
@@ -38,9 +53,17 @@ function AppWithRedux() {
                             let allTodolistTasks = tasks[tl.id];
                             let tasksForTodolist = allTodolistTasks;
 
-                            return <Grid item key={tl.id}>
+                            if (tl.filter === 'active') {
+                                tasksForTodolist = allTodolistTasks.filter(t => t.status === TaskStatuses.New);
+                            }
+                            if (tl.filter === 'completed') {
+                                tasksForTodolist = allTodolistTasks.filter(t => t.status === TaskStatuses.Completed);
+                            }
+
+                            return <Grid key={tl.id} item>
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
+                                        key={tl.id}
                                         id={tl.id}
                                         title={tl.title}
                                         tasks={tasksForTodolist}
@@ -63,4 +86,4 @@ function AppWithRedux() {
     );
 }
 
-export default AppWithRedux;
+export default App;

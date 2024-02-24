@@ -2,19 +2,63 @@
 import {useState} from 'react';
 import {todolistId1, todolistId2} from '../id-utils';
 import {v1} from 'uuid';
-import {TasksStateType} from '../App';
-import {TaskPriorities, TaskStatuses} from '../../api/todolists-api';
+import {TaskPriorities, TaskStatuses} from '../../../../api/todolists-api';
+import {TasksStateType} from '../../../../features/Todolists/tasks-reducer';
 
 
 export function useTasks() {
     let [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
-            {id: v1(), title: 'HTML&CSS', status: TaskStatuses.Completed,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",todoListId:todolistId1,order:0,addedDate:""},
-            {id: v1(), title: 'JS',status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",todoListId:todolistId1,order:0,addedDate:""}
+            {
+                id: v1(),
+                title: 'HTML&CSS',
+                status: TaskStatuses.Completed,
+                description: '',
+                priority: TaskPriorities.Low,
+                startDate: '',
+                deadline: '',
+                todoListId: todolistId1,
+                order: 0,
+                addedDate: ''
+            },
+            {
+                id: v1(),
+                title: 'JS',
+                status: TaskStatuses.New,
+                description: '',
+                priority: TaskPriorities.Low,
+                startDate: '',
+                deadline: '',
+                todoListId: todolistId1,
+                order: 0,
+                addedDate: ''
+            }
         ],
         [todolistId2]: [
-            {id: v1(), title: 'Milk', status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",todoListId:todolistId2,order:0,addedDate:""},
-            {id: v1(), title: 'React Book', status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",todoListId:todolistId2,order:0,addedDate:""}
+            {
+                id: v1(),
+                title: 'Milk',
+                status: TaskStatuses.New,
+                description: '',
+                priority: TaskPriorities.Low,
+                startDate: '',
+                deadline: '',
+                todoListId: todolistId2,
+                order: 0,
+                addedDate: ''
+            },
+            {
+                id: v1(),
+                title: 'React Book',
+                status: TaskStatuses.New,
+                description: '',
+                priority: TaskPriorities.Low,
+                startDate: '',
+                deadline: '',
+                todoListId: todolistId2,
+                order: 0,
+                addedDate: ''
+            }
         ]
     });
 
@@ -28,7 +72,18 @@ export function useTasks() {
     }
 
     function addTask(title: string, todolistId: string) {
-        let task = {id: v1(), title: title, status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",todoListId:todolistId,order:0,addedDate:""};
+        let task = {
+            id: v1(),
+            title: title,
+            status: TaskStatuses.New,
+            description: '',
+            priority: TaskPriorities.Low,
+            startDate: '',
+            deadline: '',
+            todoListId: todolistId,
+            order: 0,
+            addedDate: ''
+        };
         //достанем нужный массив по todolistId:
         let todolistTasks = tasks[todolistId];
         // перезапишем в этом объекте массив для нужного тудулиста копией, добавив в начало новую таску:
@@ -63,17 +118,20 @@ export function useTasks() {
         }
     }
 
-    function completelyRemoveTasksForTodolists(id:string){
+    function completelyRemoveTasksForTodolists(id: string) {
         delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
         setTasks({...tasks});
     }
-    function createArrTasksForTodolists(newTodolistId:string){
+
+    function createArrTasksForTodolists(newTodolistId: string) {
         setTasks({
             ...tasks,
             [newTodolistId]: []
         })
     }
 
-    return {tasks, removeTask, addTask, changeStatus, changeTaskTitle,
-        completelyRemoveTasksForTodolists, createTaskForTodolists: createArrTasksForTodolists}
+    return {
+        tasks, removeTask, addTask, changeStatus, changeTaskTitle,
+        completelyRemoveTasksForTodolists, createTaskForTodolists: createArrTasksForTodolists
+    }
 }

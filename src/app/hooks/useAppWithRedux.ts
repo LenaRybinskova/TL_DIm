@@ -1,8 +1,7 @@
-import {v1} from 'uuid';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootStateType} from '../../state/store';
+import {AppRootStateType} from '../store';
 import {useCallback, useEffect} from 'react';
-import {addTaskTC, removeTaskTC, updateTaskTC} from '../../state/tasks-reducer';
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from '../../features/Todolists/tasks-reducer';
 import {
     addTodolistTC,
     changeTodolistFilterAC,
@@ -11,16 +10,13 @@ import {
     FilterValuesType,
     removeTodolistTC,
     TodolistDomainType
-} from '../../state/todolists-reducer';
-import {TasksStateType} from '../AppWithRedux';
+} from '../../features/Todolists/todolists-reducer';
 import {TaskStatuses} from '../../api/todolists-api';
 import {ThunkDispatch} from 'redux-thunk';
 
 export const useAppWIthRedux = () => {
 
     console.log('App вызвана')
-    let todolistId1 = v1();
-    let todolistId2 = v1();
 
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
@@ -32,11 +28,11 @@ export const useAppWIthRedux = () => {
 
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
         /*        const action = changeTaskStatusAC(id, status, todolistId);*/
-        dispatch(updateTaskTC(id, {status:status}, todolistId));
+        dispatch(updateTaskTC(id, {status: status}, todolistId));
     }, [dispatch])
 
     const changeTaskTitle = useCallback((id: string, newTitle: string, todolistId: string) => {
-        dispatch(updateTaskTC(id, {title:newTitle}, todolistId));
+        dispatch(updateTaskTC(id, {title: newTitle}, todolistId));
     }, [dispatch])
 
     const removeTask = useCallback((id: string, todolistId: string) => {

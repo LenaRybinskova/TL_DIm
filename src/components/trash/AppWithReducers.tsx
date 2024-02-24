@@ -1,19 +1,19 @@
 import React, {useReducer} from 'react';
-import './App.css';
+import '../../app/App.css';
 import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm/AddItemForm';
+import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {
     addTodolistAC,
     changeTodolistFilterAC,
     changeTodolistTitleAC,
     removeTodolistAC,
     todolistsReducer
-} from './state/todolists-reducer';
-import {addTaskAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
+} from '../../features/Todolists/todolists-reducer';
+import {addTaskAC, removeTaskAC, tasksReducer} from '../../features/Todolists/tasks-reducer';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
-import {Todolist} from './TodoList';
-import {TaskPriorities, TaskStatuses, TaskType} from './api/todolists-api';
+import {Todolist} from '../../features/Todolists/Todolist/TodoList';
+import {TaskPriorities, TaskStatuses, TaskType} from '../../api/todolists-api';
 
 type FilterValuesType = "all" | "active" | "completed";
 

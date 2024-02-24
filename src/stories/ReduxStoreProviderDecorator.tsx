@@ -1,10 +1,10 @@
 import {Provider} from 'react-redux';
 import {combineReducers, createStore} from 'redux';
-import {tasksReducer} from '../state/tasks-reducer';
-import {todolistsReducer} from '../state/todolists-reducer';
+import {tasksReducer} from '../features/Todolists/tasks-reducer';
+import {todolistsReducer} from '../features/Todolists/todolists-reducer';
 import {v1} from 'uuid';
-import {AppRootStateType} from '../state/store';
-import {todolistId1, todolistId2} from '../App/id-utils';
+import {AppRootStateType} from '../app/store';
+import {todolistId1, todolistId2} from '../components/trash/App/id-utils';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 
 // заново как бы создаем стор, конкретно для сторибук
