@@ -12,7 +12,6 @@ import {
 import {addTaskAC, removeTaskAC, tasksReducer} from '../../features/Todolists/tasks-reducer';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
-import {Todolist} from '../../features/Todolists/Todolist/TodoList';
 import {TaskPriorities, TaskStatuses, TaskType} from '../../api/todolists-api';
 
 type FilterValuesType = "all" | "active" | "completed";
@@ -28,8 +27,8 @@ function AppWithReducers() {
     let todolistId2 = v1();
 
     let [todolists, dispatchToTodolists] = useReducer(todolistsReducer, [
-        {id: todolistId1, title: "What to learn", filter: "all", addedDate:"", order:0},
-        {id: todolistId2, title: "What to buy", filter: "all", addedDate:"", order:0}
+        {id: todolistId1, title: "What to learn", filter: "all", addedDate:"", order:0,entityStatus:"idle"},
+        {id: todolistId2, title: "What to buy", filter: "all", addedDate:"", order:0,entityStatus:"idle"}
     ])
 
     let [tasks, dispatchToTasks] = useReducer(tasksReducer, {

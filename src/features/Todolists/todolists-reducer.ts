@@ -1,5 +1,6 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
+import {RequestStatusType, setStatusAC, SetStatusACType} from '../../app/app-reducer';
 
 
 const initialState: Array<TodolistDomainType> = []
@@ -9,14 +10,14 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
         case 'REMOVE-TODOLIST':
             return state.filter(tl => tl.id != action.id)
         case 'ADD-TODOLIST':
-            return [{...action.todolist, filter: 'all'}, ...state]
+            return [{...action.todolist, filter: 'all', entityStatus:"idle"}, ...state]
         case 'CHANGE-TODOLIST-TITLE':
-            return state.map(tl=>tl.id===action.id?{...tl, title:action.title} :tl)
+            return state.map(tl => tl.id === action.id ? {...tl, title: action.title} : tl)
         case 'CHANGE-TODOLIST-FILTER':
-            return state.map(tl=>tl.id===action.id?{...tl, filter:action.filter} :tl)
+            return state.map(tl => tl.id === action.id ? {...tl, filter: action.filter} : tl)
         case 'SET-TODOLIST':
             //получаем тл с сервера и приводим их к типу TodolistDomainType и получ массив объектов нужного формата.
-           return  action.todolists.map(tl => ({...tl, filter: 'all'}))
+            return action.todolists.map(tl => ({...tl, filter: 'all', entityStatus:"idle"}))
         default:
             return state;
     }
@@ -43,9 +44,12 @@ export const setTodolistsAC = (todolists: TodolistType[]) => {
 //thunks
 //thunkCreator- функ, которая возвр функцию Санку ()={ return ()=>{} }
 export const fetchTodolistTC = () => {
-    return async (dispatch: Dispatch<ActionsType>) => {
+    return async (dispatch: Dispatch<ActionsType | SetStatusACType>) => {
+        dispatch(setStatusAC('loading'))
         todolistsAPI.getTodolists()
-            .then(res => dispatch(setTodolistsAC(res.data)))
+            .then(res =>
+                dispatch(setTodolistsAC(res.data)))
+        dispatch(setStatusAC('succeeded'))
     }
 }
 export const removeTodolistTC = (todolistId: string) => {
@@ -55,9 +59,11 @@ export const removeTodolistTC = (todolistId: string) => {
     }
 }
 export const addTodolistTC = (title: string) => {
-    return async (dispatch: Dispatch<ActionsType>) => {
+    return async (dispatch: Dispatch<ActionsType |SetStatusACType>) => {
+        dispatch(setStatusAC('loading'))
         todolistsAPI.createTodolist(title)
             .then(res => dispatch(addTodolistAC(res.data.data.item)))
+        dispatch(setStatusAC('succeeded'))
     }
 }
 export const changeTodolistTitleTC = (todolistId: string, title: string) => {
@@ -77,7 +83,7 @@ type ActionsType =
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 //адаптированиа нашего старого ТЛтипа и того, который с сервера придет
-export type TodolistDomainType = TodolistType & { filter: FilterValuesType }
+export type TodolistDomainType = TodolistType & { filter: FilterValuesType, entityStatus:RequestStatusType }
 export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>

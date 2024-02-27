@@ -1,8 +1,8 @@
-
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api';
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsACType} from './todolists-reducer';
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../app/store';
+import {setErrorAC, SetErrorACType, setStatusAC, SetStatusACType} from '../../app/app-reducer';
 
 
 const initialState: TasksStateType = {}
@@ -10,7 +10,7 @@ const initialState: TasksStateType = {}
 export const tasksReducer = (state: TasksStateType = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK':
-            return {...state, [action.todolistId]:state[action.todolistId].filter(t=>t.id !=action.taskId)}
+            return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id != action.taskId)}
         case 'ADD-TASK':
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]}
         case 'UPDATE-TASK':
@@ -19,7 +19,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
                 [action.todolistId]: state[action.todolistId].map(t => t.id === action.taskId ? {...t, ...action.model} : t)
             }
         case 'ADD-TODOLIST': {
-            return {...state, [action.todolist.id]: []}}
+            return {...state, [action.todolist.id]: []}
+        }
         case 'REMOVE-TODOLIST': {
             const copyState = {...state};
             delete copyState[action.id];
@@ -28,7 +29,9 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
         case 'SET-TODOLIST': {
             //когда мы подгружает ТЛ с сервера, мы должны помимо Стейта ТЛ собрать, но надо и стейт Тасок собрать. мапим ТЛ и созд ассоц массив с ключом (= идТудулиста)
             const copyState = {...state};
-            action.todolists.forEach(tl => {copyState[tl.id] = []})
+            action.todolists.forEach(tl => {
+                copyState[tl.id] = []
+            })
             return copyState;
         }
         case 'SET-TASKS': {
@@ -55,17 +58,39 @@ export const setTasksAC = (todolistId: string, tasks: TaskType[]) => {
 }
 
 //thunks
-export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType | SetStatusACType>) => {
+    dispatch(setStatusAC('loading'))
     todolistsAPI.getTasksTodolist(todolistId)
-        .then(res => dispatch(setTasksAC(todolistId, res.data.items)))
+        .then(res => {
+                dispatch(setTasksAC(todolistId, res.data.items))
+                dispatch(setStatusAC('succeeded'))
+            }
+        )
 }
 export const removeTaskTC = (todolistId: string, taskId: string) =>
     async (dispatch: Dispatch<ActionsType>) => {
         todolistsAPI.deleteTaskTodolist(todolistId, taskId).then(res => dispatch(removeTaskAC(taskId, todolistId)))
     }
-export const addTaskTC = (todolistId: string, title: string) => async (dispatch: Dispatch<ActionsType>) => {
+export const addTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionsType | SetStatusACType| SetErrorACType>) => {
+    dispatch(setStatusAC('loading'))
     todolistsAPI.createTaskTodolist(todolistId, title)
-        .then(res => dispatch(addTaskAC(res.data.data.item)))
+        .then(res => {
+            //если нет ошибок-диспачим
+            if (res.data.resultCode === 0) {
+                dispatch(addTaskAC(res.data.data.item))
+                dispatch(setStatusAC('succeeded'))
+                //если пришла ошибка, то выводим сообщение
+            } else {
+                if (res.data.messages.length) {
+                    dispatch(setErrorAC(res.data.messages[0]))
+                }
+                //если вообще никаких сообщений нет, выводим это свое
+                else {
+                    dispatch(setErrorAC('some error'))
+                }
+            }
+            dispatch(setStatusAC('failed'))
+        })
 
 }
 
@@ -117,3 +142,4 @@ type ActionsType =
     | RemoveTodolistActionType
     | SetTodolistsACType
     | ReturnType<typeof setTasksAC>
+
