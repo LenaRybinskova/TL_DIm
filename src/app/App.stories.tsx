@@ -8,13 +8,20 @@ const  meta: Meta<  typeof  App> = {
     title:   'TODOLISTS/App',
     component:   App,
     tags: [  'autodocs'],
-    decorators: [ReduxStoreProviderDecorator]
+    decorators: [ReduxStoreProviderDecorator],
+    args:{
+        demo:false
+    }
 };
 
 export default  meta;
 type Story = StoryObj<  typeof  App>;
 
-export const  AppWithReduxStory: Story = {}
+export const  AppWithReduxStory: Story = {
+    args:{
+        demo:true
+    }
+}
 
 
 

@@ -3,7 +3,7 @@ import '../../../app/App.css';
 import {AddItemForm} from '../../AddItemForm/AddItemForm';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
-import {Todolist} from '../../../features/Todolists/Todolist/TodoList';
+import {Todolist} from '../../../features/Todolists/Todolist/Todolist';
 import {useTodolists} from './hooks/useTodolists';
 import {useTasks} from './hooks/useTasks';
 import {TaskStatuses} from '../../../api/todolists-api';
@@ -45,7 +45,7 @@ function App() {
             </AppBar>
             <Container fixed>
                 <Grid container style={{padding: '20px'}}>
-                    <AddItemForm addItem={addTodolist}/>
+                    <AddItemForm onItemAdded={addTodolist}/>
                 </Grid>
                 <Grid container spacing={3}>
                     {
@@ -64,17 +64,16 @@ function App() {
                                 <Paper style={{padding: '10px'}}>
                                     <Todolist
                                         key={tl.id}
-                                        id={tl.id}
-                                        title={tl.title}
+                                        todolist={tl}
                                         tasks={tasksForTodolist}
                                         removeTask={removeTask}
                                         changeFilter={changeFilter}
                                         addTask={addTask}
                                         changeTaskStatus={changeStatus}
-                                        filter={tl.filter}
                                         removeTodolist={removeTodolist}
                                         changeTaskTitle={changeTaskTitle}
                                         changeTodolistTitle={changeTodolistTitle}
+
                                     />
                                 </Paper>
                             </Grid>

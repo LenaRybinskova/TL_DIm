@@ -1,5 +1,5 @@
 import {Provider} from 'react-redux';
-import {combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {tasksReducer} from '../features/Todolists/tasks-reducer';
 import {todolistsReducer} from '../features/Todolists/todolists-reducer';
 import {v1} from 'uuid';
@@ -7,6 +7,7 @@ import {AppRootStateType} from './store';
 import {todolistId1, todolistId2} from '../components/trash/App/id-utils';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 import {appReducer} from './app-reducer';
+import {thunk} from 'redux-thunk';
 
 // заново как бы создаем стор, конкретно для сторибук
 const rootReducer = combineReducers({
@@ -15,11 +16,12 @@ const rootReducer = combineReducers({
     app: appReducer
 })
 
+//создали стабильный Стейт-декорацию
 const initialGlobalState = {
     todolists: [
         {
             id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '',
-            order: 0,entityStatus:"idle"
+            order: 0,entityStatus:"loading"
         },
         {
             id: todolistId2, title: 'What to buy', filter: 'all', addedDate: '',
@@ -86,7 +88,7 @@ const initialGlobalState = {
     }
 }
 
-export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType);
+export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType, applyMiddleware(thunk));
 
 // for decorator
 export const ReduxStoreProviderDecorator = (storyFn: any) => {

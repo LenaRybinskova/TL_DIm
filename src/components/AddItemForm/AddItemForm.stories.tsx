@@ -8,11 +8,14 @@ const meta: Meta<typeof AddItemForm> = {
     component: AddItemForm,
     tags: ['autodocs'],
     argTypes: {
-        addItem: {
+        onItemAdded: {
             description: 'Button clicked inside form',
             action: 'clicked'
         }
     },
+    args:{
+        disabled:false
+    }
 };
 
 export default meta;
@@ -20,6 +23,13 @@ type Story = StoryObj<typeof AddItemForm>;
 
 export const AddItemFormStory: Story = {
     args: {
-        addItem: action('Button clicked inside form')
+        onItemAdded: action('Button clicked inside form')
     },
+};
+
+export const AddItemFormDisabledStory: Story = {
+    args:{
+        disabled:true
+    }
+
 };

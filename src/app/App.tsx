@@ -9,7 +9,10 @@ import {AppRootStateType} from './store';
 import {RequestStatusType} from './app-reducer';
 
 
-function App() {
+type PropsType ={
+    demo?:boolean
+}
+function App({demo=false}:PropsType) {
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     return (
@@ -26,10 +29,10 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
-            {status === 'loading' && <LinearProgress color="inherit"/>}
+            {status === 'loading' && <LinearProgress/>}
 
             <Container fixed>
-                <TodolistsList/>
+                <TodolistsList demo={demo}/>
             </Container>
         </div>
     );

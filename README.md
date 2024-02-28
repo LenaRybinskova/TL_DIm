@@ -1,3 +1,5 @@
+# 15 progressbar, disabled btn, AddItemForm
+
 # 14 Thunk
 
 ThunkCreator - то функ, принимает dispatch , getState(весь стейт). Это асинхр функ, ее особенность в том, что в ней можно осуществлять все сайд эффекты.

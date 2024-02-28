@@ -14,7 +14,12 @@ import {
 import {TaskStatuses} from '../../api/todolists-api';
 import {ThunkDispatch} from 'redux-thunk';
 
-export const useAppWIthRedux = () => {
+type PropsType = {
+    //флаг для сторибука, чтобы не тянул данные с сервера, по умолчанию фолс. а в Сторибуке компонента с тру
+    demo?:boolean
+}
+
+export const useTodolisList = ({demo=false}:PropsType) => {
 
     console.log('App вызвана')
 
@@ -23,7 +28,11 @@ export const useAppWIthRedux = () => {
     const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchTodolistTC())
+        if(!demo){
+            dispatch(fetchTodolistTC())
+        }
+        else{ return }
+
     }, [])
 
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
@@ -75,6 +84,7 @@ export const useAppWIthRedux = () => {
         changeStatus,
         removeTodolist,
         changeTaskTitle,
-        changeTodolistTitle
+        changeTodolistTitle,
+        demo
     }
 }

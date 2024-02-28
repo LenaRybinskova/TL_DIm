@@ -1,12 +1,16 @@
 import {ChangeEvent, KeyboardEvent, useState} from 'react';
 
+type UseAddItemFormType={
+    onItemAdded: (title: string) => void
+}
+
 export const useAddItemForm = (onItemAdded: (title: string) => void) => {
 
     console.log('AddItemForm вызван')
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
-    const addItem = () => {
+    const addItemHandler = () => {
         if (title.trim() !== '') {
             onItemAdded(title);
             setTitle('');
@@ -25,10 +29,10 @@ export const useAddItemForm = (onItemAdded: (title: string) => void) => {
         }
         setError(null);
         if (e.charCode === 13) {
-            addItem();
+            addItemHandler();
         }
     }
 
-    return {title,onKeyPressHandler,onChangeHandler,addItem,error}
+    return {title,onKeyPressHandler,onChangeHandler,addItem: addItemHandler,error}
 
 }
