@@ -27,19 +27,19 @@ export const todolistsAPI = {
     updateTodolist(id: string, title: string) {
         return instance.put<ResponseType<{ item: {} }>>(`todo-lists/${id}`, {title: title})
     },
-    getTasksTodolist(todolistId: string) {
+    getTasks(todolistId: string) {
         const promise = instance.get<GetTaskResponseType>(`todo-lists/${todolistId}/tasks`)
         return promise
     },
-    deleteTaskTodolist(todolistId: string, taskId: string) {
+    deleteTask(todolistId: string, taskId: string) {
         const promise = instance.delete<ResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
         return promise
     },
-    createTaskTodolist(todolistId: string, title: string) {
+    createTask(todolistId: string, title: string) {
         const promise = instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title: title})
         return promise
     },
-    updateTaskTodolist(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
         const promise = instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
         return promise
     },
@@ -52,7 +52,7 @@ export type TodolistType = {
     addedDate: string,
     order: number
 }
-type ResponseType<D = {}> = {
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[],
     data: D

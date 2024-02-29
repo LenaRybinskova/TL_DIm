@@ -1,6 +1,7 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
 import {RequestStatusType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 
 
 const initialState: Array<TodolistDomainType> = []
@@ -63,32 +64,55 @@ export const fetchTodolistTC = () => {
             })
     }
 }
-export const removeTodolistTC = (todolistId: string) => {
-    return async (dispatch: ThunkDispatch) => {
+//я делала then-catch
+export const removeTodolistTC = (todolistId: string) =>
+     (dispatch: ThunkDispatch) => {
         dispatch(setAppStatusAC('loading')) // общая крутилка включится
         dispatch(changeTodolistEntityAC(todolistId, 'loading'))  //у ТЛ статус поменятся и забизейблитсся все
         todolistsAPI.deleteTodolist(todolistId)
             .then(res => {
-                dispatch(removeTodolistAC(todolistId))
-                dispatch(setAppStatusAC('succeeded')) // откл общую крутилку
-            })
+                if(res.data.resultCode===0){
+                    dispatch(removeTodolistAC(todolistId))
+                    dispatch(setAppStatusAC('succeeded')) // откл общую крутилку
+                }
+                else{
+                    handleServerAppError(res.data,dispatch)
+                }
+            }).catch(error =>handleServerNetworkError(error, dispatch) )
     }
-}
+
 export const addTodolistTC = (title: string) => {
     return async (dispatch: Dispatch<ActionsType | SetAppStatusACType>) => {
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.createTodolist(title)
             .then(res => {
-                dispatch(addTodolistAC(res.data.data.item))
-                dispatch(setAppStatusAC('succeeded'))
-            }
+                if(res.data.resultCode===0){
+                    dispatch(addTodolistAC(res.data.data.item))
+                    dispatch(setAppStatusAC('succeeded'))
+                }
+                else{
+                    handleServerAppError(res.data,dispatch)
+                }
+            })
+            .catch(error=>
+            handleServerNetworkError(error,dispatch)
         )
     }
 }
+//я делала then-catch
 export const changeTodolistTitleTC = (todolistId: string, title: string) => {
-    return async (dispatch: Dispatch<ActionsType>) => {
+    return (dispatch: ThunkDispatch) => {
+        dispatch(setAppStatusAC('loading'))
         todolistsAPI.updateTodolist(todolistId, title)
-            .then(res => dispatch(changeTodolistTitleAC(todolistId, title)))
+            .then(res => {
+                if(res.data.resultCode===0){
+                    dispatch(changeTodolistTitleAC(todolistId, title))
+                    dispatch(setAppStatusAC('succeeded'))
+                }
+                else{
+                    handleServerAppError(res.data, dispatch)
+                }
+            }).catch(error=>handleServerNetworkError(error, dispatch))
     }
 }
 

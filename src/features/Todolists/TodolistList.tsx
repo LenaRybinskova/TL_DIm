@@ -3,6 +3,9 @@ import {useTodolisList} from '../../app/hooks/useTodolisList';
 import {Grid, Paper} from '@mui/material';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
+import {useSelector} from 'react-redux';
+import {AppRootStateType} from '../../app/store';
+import {RequestStatusType} from '../../app/app-reducer';
 
 
 type TodolistsListPropsType={
@@ -10,12 +13,13 @@ type TodolistsListPropsType={
 }
 const TodolistsList: React.FC<TodolistsListPropsType> = (props) => {
 
+    const status=useSelector<AppRootStateType, RequestStatusType>(state=>state.app.status)
     const {todolists, addTodolist, tasks, removeTask, changeFilter, addTask, changeStatus, removeTodolist, changeTaskTitle, changeTodolistTitle,} =useTodolisList(props)
 
     return (
         <>
             <Grid container style={{padding: '20px'}}>
-                <AddItemForm onItemAdded={addTodolist}/>
+                <AddItemForm onItemAdded={addTodolist} disabled={status==="loading"}/>
             </Grid>
             <Grid container spacing={3}>
                 {

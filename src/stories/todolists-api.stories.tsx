@@ -119,7 +119,7 @@ export const GetTasks = () => {
         }, [])*/
 
     const onClickHanndler = () => {
-        todolistsAPI.getTasksTodolist(idTL)
+        todolistsAPI.getTasks(idTL)
             .then((res) => {
                 setState(res.data.items)
             })
@@ -147,7 +147,7 @@ export const CreateTask = () => {
     }, [])*/
 
     const onClickHandler = () => {
-        todolistsAPI.createTaskTodolist(idTL, taskTitle).then(res => setState(res.data))
+        todolistsAPI.createTask(idTL, taskTitle).then(res => setState(res.data))
     }
 
     return <div>
@@ -172,7 +172,7 @@ export const DeleteTask = () => {
    */
     //c63283b6-4bec-4bda-a166-efef13218baf
     const onClickHandler = () => {
-        todolistsAPI.deleteTaskTodolist(idTL, idTask).then((res) => {
+        todolistsAPI.deleteTask(idTL, idTask).then((res) => {
             setState(res.data)
         })
     }
@@ -226,7 +226,7 @@ export const UpdateTask = () => {
             startDate: "",
             deadline: ""
         }
-        todolistsAPI.updateTaskTodolist(idTL, idTask, model).then((res) => setState(res.data))
+        todolistsAPI.updateTask(idTL, idTask, model).then((res) => setState(res.data))
     }
     return <div>
         <div><input placeholder={'id TL'} value={idTL} onChange={e => setIdTL(e.currentTarget.value)}/></div>
