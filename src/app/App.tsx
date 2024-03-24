@@ -7,15 +7,19 @@ import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from './store';
 import {RequestStatusType} from './app-reducer';
+import { Route, Routes} from 'react-router-dom';
+import {Login} from '../features/Login/Login';
 
 
-type PropsType ={
-    demo?:boolean
+type PropsType = {
+    demo?: boolean
 }
-function App({demo=false}:PropsType) {
+
+function App({demo = false}: PropsType) {
     const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
 
     return (
+
         <div className="App">
             <ErrorSnackbar/>
             <AppBar position="static">
@@ -30,11 +34,17 @@ function App({demo=false}:PropsType) {
                 </Toolbar>
             </AppBar>
             {status === 'loading' && <LinearProgress/>}
-
             <Container fixed>
-                <TodolistsList demo={demo}/>
+                <Routes>
+                    {/*если  URL только слеш, то список ТЛ - это со старта приложения*/}
+                    <Route path="/" element={<TodolistsList demo={demo}/>}/>
+                    {/*если в URL login, то рендериться компонента Login*/}
+                    <Route path="login" element={<Login/>}/>
+                </Routes>
             </Container>
         </div>
+
+
     );
 }
 

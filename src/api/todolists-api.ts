@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 
+
 // withCredentials: true означает, что включена передача куков
 const settings = {
     withCredentials: true,
@@ -43,6 +44,19 @@ export const todolistsAPI = {
         const promise = instance.put<ResponseType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
         return promise
     },
+}
+
+
+export type LoginParamsType={
+    email: string,
+    password: string,
+    rememberMe?: boolean,
+    captcha?: string
+}
+export const authAPI = {
+    login(data:LoginParamsType) {
+        return instance.post<ResponseType<{userId?:number}>>('/auth/login', data)
+    }
 }
 
 //api types

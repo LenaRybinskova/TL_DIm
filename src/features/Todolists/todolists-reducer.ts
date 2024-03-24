@@ -1,6 +1,6 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
-import {RequestStatusType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
+import {RequestStatusType, SetAppErrorACType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 
 
@@ -12,7 +12,6 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
             return state.filter(tl => tl.id != action.id)
         case 'ADD-TODOLIST':
             return [{...action.todolist, filter: 'all', entityStatus: 'idle'}, ...state]
-
         case 'CHANGE-TODOLIST-ENTITY-STATUS':
             return state.map(tl => tl.id === action.id ? {...tl, entityStatus: action.statusEntity} : tl)
         case 'CHANGE-TODOLIST-TITLE':
@@ -61,7 +60,8 @@ export const fetchTodolistTC = () => {
             .then(res => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
-            })
+            }).catch(error=>{handleServerNetworkError(error, dispatch)})
+
     }
 }
 //я делала then-catch
@@ -134,6 +134,6 @@ export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
 export type ChangeTodolistEntityACType = ReturnType<typeof changeTodolistEntityAC>
-type ThunkDispatch = Dispatch<ActionsType | SetAppStatusACType>
+type ThunkDispatch = Dispatch<ActionsType | SetAppStatusACType | SetAppErrorACType>
 
 

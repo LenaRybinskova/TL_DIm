@@ -8,12 +8,14 @@ import {todolistId1, todolistId2} from '../components/trash/App/id-utils';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 import {appReducer} from './app-reducer';
 import {thunk} from 'redux-thunk';
+import {authReducer} from '../features/Login/auth-reducer';
 
 // заново как бы создаем стор, конкретно для сторибук
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
-    app: appReducer
+    app: appReducer,
+    auth:authReducer
 })
 
 //создали стабильный Стейт-декорацию
