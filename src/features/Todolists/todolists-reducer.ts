@@ -60,7 +60,11 @@ export const fetchTodolistTC = () => {
             .then(res => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
-            }).catch(error=>{handleServerNetworkError(error, dispatch)})
+            })
+            .catch(error=>{handleServerNetworkError(error, dispatch)
+/*                handleServerAppError(error, dispatch) я добавляла для теста*/
+            }
+        )
 
     }
 }

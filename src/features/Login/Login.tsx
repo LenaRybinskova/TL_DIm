@@ -8,33 +8,33 @@ import {ThunkDispatch} from 'redux-thunk';
 import {AppRootStateType} from '../../app/store';
 import { Navigate } from 'react-router-dom';
 
-
-
 export const Login: React.FC = () => {
     const dispatch: ThunkDispatch<AppRootStateType, any, any> =  useDispatch()
     const isLoggedIn=useSelector<AppRootStateType, boolean>(state=>state.auth.isLoggedIn)
 
     const formik = useFormik({
+        //initialValues стартовые значения формы
+        initialValues: {email: '', password: '', rememberMe: false},
+
         // когда мы что то в инпуты вводим, сюда кажд новая буква будет приходить в новом объекте values
         validate: (values) => {
             //если в values.email ничего нет
-            if (!values.email) {return {email: 'email required'}}
-            if (!values.password) {return {password: 'password required'}}
+            if (!values.email) {return {email: 'email is required'}}
+            if (!values.password) {return {password: 'password is required'}}
         },
 
-        //initialValues стартовые значения формы
-        initialValues: {email: '', password: '', rememberMe: false},
-        // onSubmit это коллбек, в который форма собрала все значения введеные
+        // onSubmit это коллбек(formik.handleSubmit), в который форма собрала  в values все значения введеные в инпуты
         onSubmit: values => {
             console.log("values", values)
             dispatch(loginTC(values))
         },
+
     });
 
+    //залогинена? редирект на гл страницу
     if(isLoggedIn){
-        return (
-            <Navigate to="/"/>
-        )
+        console.log("isLoggedIn", isLoggedIn)
+        return (<Navigate to="/"/>)
     }
 
     return (
@@ -55,20 +55,16 @@ export const Login: React.FC = () => {
                                    value={formik.values.email}*/
                                 {...formik.getFieldProps('email')}
                             />
-                            {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-                            <TextField
-                                type={'password'}
-                                label="password"
-                                margin="normal"
-                                {...formik.getFieldProps('password')}
-                            />
-                            {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+                            {formik.errors.email ? <div>{formik.errors.email}</div> : null} {/*// отобр ошибки*/}
+
+                            <TextField type={'password'} label="password" margin="normal"{...formik.getFieldProps('password')}/>
+                            {formik.errors.password ? <div>{formik.errors.password}</div> : null} {/*// отобр ошибки*/}
+
 {/*                            FormControlLabel делает слова РемемберМи тоже чекет*/}
                             <FormControlLabel control={<Checkbox  {...formik.getFieldProps('rememberMe')}
                                                                   checked={formik.values.rememberMe}/>}
                                               label={'Remember me'}/>
                             <Button type={'submit'} variant={'contained'} color={'primary'}>Login</Button>
-
                         </FormGroup>
                     </FormControl>
                 </Grid>

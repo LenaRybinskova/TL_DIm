@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from '../store';
-import {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from '../../features/Todolists/tasks-reducer';
 import {
     addTodolistTC,
@@ -13,27 +13,30 @@ import {
 } from '../../features/Todolists/todolists-reducer';
 import {TaskStatuses} from '../../api/todolists-api';
 import {ThunkDispatch} from 'redux-thunk';
+import {RequestStatusType} from '../app-reducer';
+import { Navigate } from 'react-router-dom';
 
 type PropsType = {
     //флаг для сторибука, чтобы не тянул данные с сервера, по умолчанию фолс. а в Сторибуке компонента с тру
-    demo?:boolean
+    demo?: boolean
 }
 
-export const useTodolisList = ({demo=false}:PropsType) => {
-
-    console.log('App вызвана')
-
+export const useTodolisList = ({demo = false}: PropsType) => {
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const status = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status)
+
     const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()
 
+    //было !demo. изм после инициализации
     useEffect(() => {
-        if(!demo){
-            dispatch(fetchTodolistTC())
+        if (demo || !isLoggedIn) {
+            return
         }
-        else{ return }
-
+        dispatch(fetchTodolistTC())
     }, [])
+
 
     const changeStatus = useCallback((id: string, status: TaskStatuses, todolistId: string) => {
         /*        const action = changeTaskStatusAC(id, status, todolistId);*/
@@ -73,6 +76,10 @@ export const useTodolisList = ({demo=false}:PropsType) => {
         dispatch(addTodolistTC(title));
     }, [dispatch])
 
+// у Димыча это условие в компоненте, а не кастомном хуке. у него нет каст хука.
+/*    if (!isLoggedIn) {
+        return (<Navigate to="/" />)
+    }*/
 
     return {
         todolists,
@@ -85,6 +92,7 @@ export const useTodolisList = ({demo=false}:PropsType) => {
         removeTodolist,
         changeTaskTitle,
         changeTodolistTitle,
-        demo
+        demo,
+        status
     }
 }

@@ -3,18 +3,24 @@ import {useTodolisList} from '../../app/hooks/useTodolisList';
 import {Grid, Paper} from '@mui/material';
 import {AddItemForm} from '../../components/AddItemForm/AddItemForm';
 import {Todolist} from './Todolist/Todolist';
+import {Navigate} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from '../../app/store';
-import {RequestStatusType} from '../../app/app-reducer';
+
 
 
 type TodolistsListPropsType={
     demo?:boolean
 }
 const TodolistsList: React.FC<TodolistsListPropsType> = (props) => {
+/*debugger*/
+    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+    const {todolists, addTodolist, tasks, removeTask, changeFilter, addTask, changeStatus, removeTodolist, changeTaskTitle, changeTodolistTitle,status} =useTodolisList(props)
 
-    const status=useSelector<AppRootStateType, RequestStatusType>(state=>state.app.status)
-    const {todolists, addTodolist, tasks, removeTask, changeFilter, addTask, changeStatus, removeTodolist, changeTaskTitle, changeTodolistTitle,} =useTodolisList(props)
+    //не залогинен? редирект на логин
+    if (!isLoggedIn) {
+        return (<Navigate to="/login" />)
+    }
 
     return (
         <>
