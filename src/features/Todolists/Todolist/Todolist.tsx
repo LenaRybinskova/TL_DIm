@@ -28,7 +28,6 @@ type PropsType = {
 }
 
 export const Todolist = React.memo(({demo=false,...props}: PropsType) => {
-    console.log('Тудулист вызван')
 
     const dispatch: ThunkDispatch<AppRootStateType, any, any> =   useDispatch()
 

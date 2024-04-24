@@ -61,6 +61,7 @@ export const authAPI = {
         return instance.delete<ResponseType>('/auth/login')
     },
     me(){
+        //если залогинены - значит резалтКод===0 и в браузере есть кука
         return instance.get<ResponseType<{id:number, email:string,login:string }>>("/auth/me")
     }
 

@@ -1,6 +1,7 @@
 import {Dispatch} from 'redux';
 import {authAPI} from '../api/todolists-api';
 import {setIsLoggedInAC, SetIsLoggedInACType} from '../features/Login/auth-reducer';
+import {handleServerAppError, handleServerNetworkError} from '../utils/error-utils';
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
@@ -28,17 +29,24 @@ export const setAppInitializedAC = (value: boolean) => {
 
 
 //thunk
-export const initializedAppTC = () => {
-    return (dispatch: Dispatch<ActionsType>) => {
-        authAPI.me().then(res => {
-            if (res.data.resultCode === 0) {
-                dispatch(setIsLoggedInAC(true)) //залогинены
-            } else {
-            }
-            dispatch(setAppInitializedAC(true)) //проиниц
-        })
+export const initializedAppTC = () => async (dispatch: Dispatch<ActionsType>) => {
+    dispatch(setAppStatusAC('loading'))
+    try {
+        const res = await authAPI.me()
+        if (res.data.resultCode === 0) {
+            dispatch(setIsLoggedInAC(true))
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
+    } catch (e) {
+        handleServerNetworkError(e as { message: string }, dispatch)
+    } finally {
+        dispatch(setAppInitializedAC(true)) //проиниц приложение в любом случае как то
     }
+
 }
+
 
 ///types
 export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>

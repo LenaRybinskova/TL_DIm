@@ -1,3 +1,39 @@
+# 16 initializedAppTC
+
+```
+function App({demo = false}: PropsType) {
+
+    №2 // после крутилки отраб useEffect и запускает initializedAppTC, которая проверяет, залогинена? (=кука создана?)
+    useEffect(() => {
+        №3 dispatch(initializedAppTC()) // если кука есть => isLoggedIn=true 
+    }, [])
+
+
+    const logoutHandler = useCallback(() => {
+        dispatch(logoutTC())
+    }, [])
+
+    №1 //пока прил инициализируется(со старта -фолс) - крутилка, считаем Арр JSX свой вернула
+    if (!isInitialized) {
+        return <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
+    №4 useEffect отработал, пошли по дефолтному <Route path="/" element={<TodolistsList demo={demo}/>}/>
+    return (
+        <Routes>
+             {/*если  URL только слеш, то список ТЛ - это со старта приложения*/}
+             <Route path="/" element={<TodolistsList demo={demo}/>}/>
+             {/*если в URL login, то рендериться компонента Login*/}
+             <Route path="login" element={<Login/>}/>
+             <Route path={'/404'}
+                element={<h1>PAGE NOT FOUND</h1>}></Route> {/*// сделали чтобы ошибке в урл было 404*/}
+             <Route path={'*'} element={<Navigate to={'/404'}/>}/>
+        </Routes>
+            )
+```
+
 # 16 formic
 
 formic контролирует стейт формы через локальный стейт

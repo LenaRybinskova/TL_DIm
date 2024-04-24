@@ -13,12 +13,13 @@ type TodolistsListPropsType={
     demo?:boolean
 }
 const TodolistsList: React.FC<TodolistsListPropsType> = (props) => {
-/*debugger*/
+
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
     const {todolists, addTodolist, tasks, removeTask, changeFilter, addTask, changeStatus, removeTodolist, changeTaskTitle, changeTodolistTitle,status} =useTodolisList(props)
 
     //не залогинен? редирект на логин
     if (!isLoggedIn) {
+
         return (<Navigate to="/login" />)
     }
 

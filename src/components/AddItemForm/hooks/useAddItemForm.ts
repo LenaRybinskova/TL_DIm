@@ -6,7 +6,7 @@ type UseAddItemFormType={
 
 export const useAddItemForm = (onItemAdded: (title: string) => void) => {
 
-    console.log('AddItemForm вызван')
+
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 

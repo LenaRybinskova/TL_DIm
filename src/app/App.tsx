@@ -16,7 +16,7 @@ import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './store';
 import {initializedAppTC, RequestStatusType} from './app-reducer';
-import {Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import {Login} from '../features/Login/Login';
 import {ThunkDispatch} from 'redux-thunk';
 import {logoutTC} from '../features/Login/auth-reducer';
@@ -33,6 +33,7 @@ function App({demo = false}: PropsType) {
     const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.iSInitialized)
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
+// после крутилки отраб useEffect и запускает initializedAppTC, которая проверяет, залогинена? (=кука создана?)
 
     useEffect(() => {
         dispatch(initializedAppTC())
@@ -43,8 +44,10 @@ function App({demo = false}: PropsType) {
         dispatch(logoutTC())
     }, [])
 
+    //пока прил инициализируется(со старта -фолс) - крутилка
     if (!isInitialized) {
-        return <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}><CircularProgress/>
+        return <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
         </div>
     }
 
@@ -69,6 +72,9 @@ function App({demo = false}: PropsType) {
                     <Route path="/" element={<TodolistsList demo={demo}/>}/>
                     {/*если в URL login, то рендериться компонента Login*/}
                     <Route path="login" element={<Login/>}/>
+                    <Route path={'/404'}
+                           element={<h1>PAGE NOT FOUND</h1>}></Route> {/*// сделали чтобы ошибке в урл было 404*/}
+                    <Route path={'*'} element={<Navigate to={'/404'}/>}/>
                 </Routes>
             </Container>
         </div>
