@@ -2,6 +2,7 @@ import {todolistsAPI, TodolistType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
 import {RequestStatusType, SetAppErrorACType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
+import {fetchTasksTC} from './tasks-reducer';
 
 
 const initialState: Array<TodolistDomainType> = []
@@ -21,6 +22,8 @@ export const todolistsReducer = (state: Array<TodolistDomainType> = initialState
         case 'SET-TODOLIST':
             //получаем тл с сервера и приводим их к типу TodolistDomainType и получ массив объектов нужного формата.
             return action.todolists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
+        case 'CLEAR-DATA':
+            return []
         default:
             return state;
     }
@@ -49,40 +52,47 @@ export const changeTodolistFilterAC = (id: string, filter: FilterValuesType) => 
 export const setTodolistsAC = (todolists: TodolistType[]) => {
     return {type: 'SET-TODOLIST', todolists} as const
 }
+export const clearDataAC = () => {
+    return {type: 'CLEAR-DATA'} as const
+}
 
 
 //thunks
 //thunkCreator- функ, которая возвр функцию Санку ()={ return ()=>{} }
 export const fetchTodolistTC = () => {
-    return (dispatch: ThunkDispatch) => {
+    return (dispatch: any) => {
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.getTodolists()
             .then(res => {
                 dispatch(setTodolistsAC(res.data))
                 dispatch(setAppStatusAC('succeeded'))
+                return res.data
             })
-            .catch(error=>{handleServerNetworkError(error, dispatch)
-/*                handleServerAppError(error, dispatch) я добавляла для теста*/
-            }
-        )
+            .then((todolists: TodolistType[]) => {
+                todolists.forEach(tl => dispatch(fetchTasksTC(tl.id)))
+            })
+            .catch(error => {
+                    handleServerNetworkError(error, dispatch)
+                    /*                handleServerAppError(error, dispatch) я добавляла для теста*/
+                }
+            )
 
     }
 }
 //я делала then-catch
 export const removeTodolistTC = (todolistId: string) =>
-     (dispatch: ThunkDispatch) => {
+    (dispatch: ThunkDispatch) => {
         dispatch(setAppStatusAC('loading')) // общая крутилка включится
         dispatch(changeTodolistEntityAC(todolistId, 'loading'))  //у ТЛ статус поменятся и забизейблитсся все
         todolistsAPI.deleteTodolist(todolistId)
             .then(res => {
-                if(res.data.resultCode===0){
+                if (res.data.resultCode === 0) {
                     dispatch(removeTodolistAC(todolistId))
                     dispatch(setAppStatusAC('succeeded')) // откл общую крутилку
+                } else {
+                    handleServerAppError(res.data, dispatch)
                 }
-                else{
-                    handleServerAppError(res.data,dispatch)
-                }
-            }).catch(error =>handleServerNetworkError(error, dispatch) )
+            }).catch(error => handleServerNetworkError(error, dispatch))
     }
 
 export const addTodolistTC = (title: string) => {
@@ -90,17 +100,16 @@ export const addTodolistTC = (title: string) => {
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.createTodolist(title)
             .then(res => {
-                if(res.data.resultCode===0){
+                if (res.data.resultCode === 0) {
                     dispatch(addTodolistAC(res.data.data.item))
                     dispatch(setAppStatusAC('succeeded'))
-                }
-                else{
-                    handleServerAppError(res.data,dispatch)
+                } else {
+                    handleServerAppError(res.data, dispatch)
                 }
             })
-            .catch(error=>
-            handleServerNetworkError(error,dispatch)
-        )
+            .catch(error =>
+                handleServerNetworkError(error, dispatch)
+            )
     }
 }
 //я делала then-catch
@@ -109,14 +118,13 @@ export const changeTodolistTitleTC = (todolistId: string, title: string) => {
         dispatch(setAppStatusAC('loading'))
         todolistsAPI.updateTodolist(todolistId, title)
             .then(res => {
-                if(res.data.resultCode===0){
+                if (res.data.resultCode === 0) {
                     dispatch(changeTodolistTitleAC(todolistId, title))
                     dispatch(setAppStatusAC('succeeded'))
-                }
-                else{
+                } else {
                     handleServerAppError(res.data, dispatch)
                 }
-            }).catch(error=>handleServerNetworkError(error, dispatch))
+            }).catch(error => handleServerNetworkError(error, dispatch))
     }
 }
 
@@ -129,6 +137,7 @@ type ActionsType =
     | ReturnType<typeof changeTodolistFilterAC>
     | SetTodolistsACType
     | ChangeTodolistEntityACType
+    | clearDataACType
 
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
@@ -138,6 +147,7 @@ export type RemoveTodolistActionType = ReturnType<typeof removeTodolistAC>
 export type AddTodolistActionType = ReturnType<typeof addTodolistAC>
 export type SetTodolistsACType = ReturnType<typeof setTodolistsAC>
 export type ChangeTodolistEntityACType = ReturnType<typeof changeTodolistEntityAC>
+export type clearDataACType = ReturnType<typeof clearDataAC>
 type ThunkDispatch = Dispatch<ActionsType | SetAppStatusACType | SetAppErrorACType>
 
 

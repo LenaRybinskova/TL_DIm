@@ -1,5 +1,10 @@
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api';
-import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsACType} from './todolists-reducer';
+import {
+    AddTodolistActionType,
+    clearDataACType,
+    RemoveTodolistActionType,
+    SetTodolistsACType
+} from './todolists-reducer';
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../app/store';
 import {setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
@@ -39,6 +44,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: Actio
             //когда получ массив тасок для ТЛ, кладем их в ассоц массив целиком по ключу Тл
             return {...state, [action.todolistId]: action.tasks}
         }
+        case 'CLEAR-DATA':
+            return {}
         default:
             return state;
     }
@@ -159,5 +166,6 @@ type ActionsType =
     | RemoveTodolistActionType
     | SetTodolistsACType
     | ReturnType<typeof setTasksAC>
+    | clearDataACType
 
 type ThunkDispatch = Dispatch<ActionsType | SetAppStatusACType | SetAppErrorACType>

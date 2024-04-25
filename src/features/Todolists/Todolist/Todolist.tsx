@@ -13,7 +13,7 @@ import {fetchTasksTC} from '../tasks-reducer';
 
 
 type PropsType = {
-    todolist:TodolistDomainType
+    todolist: TodolistDomainType
     tasks: Array<TaskType>
     changeFilter: (value: FilterValuesType, todolistId: string) => void
     addTask: (title: string, todolistId: string) => void
@@ -27,17 +27,16 @@ type PropsType = {
 
 }
 
-export const Todolist = React.memo(({demo=false,...props}: PropsType) => {
+export const Todolist = React.memo(({demo = false, ...props}: PropsType) => {
 
-    const dispatch: ThunkDispatch<AppRootStateType, any, any> =   useDispatch()
+    const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()
 
     useEffect(() => {
         //чтобы Storybook не тянул данные с сервера. если demo тру - выкинет ию юзЭфф. если фолс-пойдет за данными
-        if(demo){
+        if (demo) {
             return
-        }
-        else{
-            dispatch(fetchTasksTC(props.todolist.id))
+        } else {
+            /*     dispatch(fetchTasksTC(props.todolist.id)) закоммент, тк нет послед-ти четкой: сначала фетч ТЛ. потом фетч тасок.*/
         }
     }, [])
 
@@ -68,15 +67,17 @@ export const Todolist = React.memo(({demo=false,...props}: PropsType) => {
     }
 
     return <div>
-        <h3><EditableSpan value={props.todolist.title} onChange={changeTodolistTitle} disabled={props.todolist.entityStatus==="loading"}/>
-            <IconButton onClick={removeTodolist} disabled={props.todolist.entityStatus==="loading"}>
+        <h3><EditableSpan value={props.todolist.title} onChange={changeTodolistTitle}
+                          disabled={props.todolist.entityStatus === 'loading'}/>
+            <IconButton onClick={removeTodolist} disabled={props.todolist.entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </h3>
-        <AddItemForm onItemAdded={addTask} disabled={props.todolist.entityStatus==="loading"}/>
+        <AddItemForm onItemAdded={addTask} disabled={props.todolist.entityStatus === 'loading'}/>
         <div>
             {
-                tasksForTodolist.map(t => <Task key={t.id} todolistId={props.todolist.id} task={t} removeTask={props.removeTask}
+                tasksForTodolist.map(t => <Task key={t.id} todolistId={props.todolist.id} task={t}
+                                                removeTask={props.removeTask}
                                                 changeTaskStatus={props.changeTaskStatus}
                                                 changeTaskTitle={props.changeTaskTitle}/>)
             }
