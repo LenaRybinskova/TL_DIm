@@ -19,7 +19,6 @@ const TodolistsList: React.FC<TodolistsListPropsType> = (props) => {
 
     //не залогинен? редирект на логин
     if (!isLoggedIn) {
-
         return (<Navigate to="/login" />)
     }
 

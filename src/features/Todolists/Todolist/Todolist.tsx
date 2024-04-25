@@ -37,7 +37,7 @@ export const Todolist = React.memo(({demo=false,...props}: PropsType) => {
             return
         }
         else{
-            dispatch(fetchTasksTC(props.todolist.id))
+/*            dispatch(fetchTasksTC(props.todolist.id))*/
         }
     }, [])
 

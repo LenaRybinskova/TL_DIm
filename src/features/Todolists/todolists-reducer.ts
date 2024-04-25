@@ -3,6 +3,7 @@ import {Dispatch} from 'redux';
 import {RequestStatusType, SetAppErrorACType, setAppStatusAC, SetAppStatusACType} from '../../app/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {fetchTasksTC} from './tasks-reducer';
 
 
 const initialState: Array<TodolistDomainType> = []
@@ -41,6 +42,9 @@ const slice = createSlice({
         },
         setTodolistsAC(state, action: PayloadAction<{ todolists: TodolistType[] }>) {
             return action.payload.todolists.map(tl => ({...tl, filter: 'all', entityStatus: 'idle'}))
+        },
+        clearDataAC() {
+            return []
         }
     }
 })
@@ -51,26 +55,28 @@ export const {
     changeTodolistEntityAC,
     changeTodolistTitleAC,
     changeTodolistFilterAC,
-    setTodolistsAC
+    setTodolistsAC,clearDataAC
 } = slice.actions
 
 
 //thunks
 //thunkCreator- функ, которая возвр функцию Санку ()={ return ()=>{} }
 export const fetchTodolistTC = () => {
-    return (dispatch: Dispatch) => {
+    return (dispatch: any) => {
         dispatch(setAppStatusAC({status: 'loading'}))
         todolistsAPI.getTodolists()
             .then(res => {
                 dispatch(setTodolistsAC({todolists: res.data}))
                 dispatch(setAppStatusAC({status: 'succeeded'}))
-            })
+                return res.data
+                //вернула массив ТЛ, дальше в then
+            }).then((todolists: TodolistType[]) => {
+            todolists.forEach(tl => dispatch(fetchTasksTC(tl.id)))
+        })
             .catch(error => {
                     handleServerNetworkError(error, dispatch)
-                    /*                handleServerAppError(error, dispatch) я добавляла для теста*/
                 }
             )
-
     }
 }
 //я делала then-catch

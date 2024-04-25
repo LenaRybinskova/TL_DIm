@@ -8,7 +8,7 @@ import {
 } from '../../api/todolists-api';
 import {
     addTodolistAC,
-    AddTodolistActionType,
+    AddTodolistActionType, clearDataAC,
     removeTodolistAC,
     RemoveTodolistActionType,
     setTodolistsAC,
@@ -61,6 +61,9 @@ const slice = createSlice({
             action.payload.todolists.forEach((tl: TodolistType) => {
                 state[tl.id] = []
             })
+        })
+        builder.addCase(clearDataAC, (state, action) => {
+           return {}
         })
     }
 })
