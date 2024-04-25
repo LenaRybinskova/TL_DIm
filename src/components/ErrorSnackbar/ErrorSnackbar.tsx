@@ -10,17 +10,12 @@ export function ErrorSnackbar() {
     const error = useSelector<AppRootStateType, string | null>(state => state.app.error)
     const dispatch = useDispatch()
 
-
-    const handleClick = () => {
-
-    }
-
     const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
         // если гдето мимо кликаем, то не уберется сообщение
         if (reason === 'clickaway') {
             return;
         }
-        dispatch(setAppErrorAC(null))
+        dispatch(setAppErrorAC({error:null}))
     }
 
     return (

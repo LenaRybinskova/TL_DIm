@@ -43,12 +43,12 @@ function AppWithReducers() {
     });
 
     function removeTask(id: string, todolistId: string) {
-        const action = removeTaskAC(id, todolistId);
+        const action = removeTaskAC({taskId:id,todolistId:todolistId});
         dispatchToTasks(action);
     }
 
     function addTask(title: string, todolistId: string) {
-        const action = addTaskAC({id: "id-exist", title: title, status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",order:0,addedDate:"",todoListId:todolistId});
+        const action = addTaskAC({task:{id: "id-exist", title: title, status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",order:0,addedDate:"",todoListId:todolistId}});
         dispatchToTasks(action);
     }
 
@@ -63,23 +63,23 @@ function AppWithReducers() {
     }*/
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-        const action = changeTodolistFilterAC(todolistId, value);
+        const action = changeTodolistFilterAC({id:todolistId,filter: value});
         dispatchToTodolists(action);
     }
 
     function removeTodolist(id: string) {
-        const action = removeTodolistAC(id);
+        const action = removeTodolistAC({id:id});
         dispatchToTasks(action);
         dispatchToTodolists(action);
     }
 
     function changeTodolistTitle(id: string, title: string) {
-        const action = changeTodolistTitleAC(id, title);
+        const action = changeTodolistTitleAC({id:id, title:title});
         dispatchToTodolists(action);
     }
 
     function addTodolist(title: string) {
-        const action = addTodolistAC({id: v1(), title: title, addedDate:"", order:0});
+        const action = addTodolistAC({todolist:{id: v1(), title: title, addedDate:"", order:0}});
         dispatchToTasks(action);
         dispatchToTodolists(action);
     }
