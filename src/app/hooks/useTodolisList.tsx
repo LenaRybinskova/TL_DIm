@@ -48,7 +48,7 @@ export const useTodolisList = ({demo = false}: PropsType) => {
     }, [dispatch])
 
     const removeTask = useCallback((id: string, todolistId: string) => {
-        dispatch(removeTaskTC(todolistId, id))
+        dispatch(removeTaskTC({todolistId:todolistId,taskId: id}))
     }, [dispatch])
 
     const addTask = useCallback((title: string, todolistId: string) => {

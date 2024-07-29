@@ -9,7 +9,7 @@ import {
     removeTodolistAC,
     todolistsReducer
 } from '../../features/Todolists/todolists-reducer';
-import {addTaskAC, removeTaskAC, tasksReducer} from '../../features/Todolists/tasks-reducer';
+import {addTaskAC,  tasksReducer} from '../../features/Todolists/tasks-reducer';
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {TaskPriorities, TaskStatuses, TaskType} from '../../api/todolists-api';
@@ -42,10 +42,10 @@ function AppWithReducers() {
         ]
     });
 
-    function removeTask(id: string, todolistId: string) {
+/*    function removeTask(id: string, todolistId: string) {
         const action = removeTaskAC({taskId:id,todolistId:todolistId});
         dispatchToTasks(action);
-    }
+    }*/
 
     function addTask(title: string, todolistId: string) {
         const action = addTaskAC({task:{id: "id-exist", title: title, status: TaskStatuses.New,description:"",priority:TaskPriorities.Low,startDate:"",deadline:"",order:0,addedDate:"",todoListId:todolistId}});
