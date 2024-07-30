@@ -16,7 +16,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: string, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'})) //крутилка
-    return todolistsAPI.getTasks(todolistId)
+    return todolistsAPI.getTasks(todolistId) // return без ретурна будет работать?
         .then(res => {//промис зарезолв, выкл крутилку и возвра объект для fetchTasksTC.fulfilled
                 thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'})) //крутилка
                 return {todolistId: todolistId, tasks: res.data.items}
@@ -25,6 +25,7 @@ export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: st
 })
 
 export const removeTaskTC = createAsyncThunk('tasks/removeTask', (param: { todolistId: string, taskId: string }, thunkAPI) => {
+
     return todolistsAPI.deleteTask(param.todolistId, param.taskId)
         .then(res => {
             if (res.data.resultCode === 0) {
@@ -84,8 +85,9 @@ const slice = createSlice({
                 state[action.payload.todolistId] = action.payload.tasks
             })
             .addCase(removeTaskTC.fulfilled, (state, action) => {
-               const tasks = state[action.payload.todolistId]
-                const index = tasks.findIndex(t => t.id === action.payload.taskId)
+                //todolistId можно взять из action.meta.arg и action.payload
+               const tasks = state[action.meta.arg.todolistId]
+                const index = tasks.findIndex(t => t.id === action.meta.arg.taskId)
                 if (index > -1) {
                     tasks.splice(index, 1)
                 }

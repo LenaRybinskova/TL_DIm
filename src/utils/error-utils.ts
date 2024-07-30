@@ -16,6 +16,7 @@ export const handleServerAppError = <D>(data:ResponseType<D>,dispatch:Dispatch<S
 
     //отловит, если нет инета
 export const handleServerNetworkError=(error:{message:string}, dispatch:Dispatch<SetAppStatusACType | SetAppErrorACType>)=>{
+
     dispatch(setAppErrorAC(error.message? {error:error.message}:{error:'some error occured, CATCH'})) // показатель польз ошибку
     dispatch(setAppStatusAC({status:'failed'})) // откл общую крутилку
 }
