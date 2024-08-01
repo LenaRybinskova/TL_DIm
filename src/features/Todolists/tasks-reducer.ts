@@ -16,7 +16,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: string, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'})) //крутилка
-    return todolistsAPI.getTasks(todolistId) // return без ретурна будет работать?
+    return todolistsAPI.getTasks(todolistId)
         .then(res => {//промис зарезолв, выкл крутилку и возвра объект для fetchTasksTC.fulfilled
                 thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'})) //крутилка
                 return {todolistId: todolistId, tasks: res.data.items}
@@ -24,7 +24,9 @@ export const fetchTasksTC = createAsyncThunk('tasks/fetchTasks', (todolistId: st
         )
 })
 
-export const removeTaskTC = createAsyncThunk('tasks/removeTask', (param: { todolistId: string, taskId: string }, thunkAPI) => {
+export const removeTaskTC = createAsyncThunk(
+    'tasks/removeTask',
+    (param: { todolistId: string, taskId: string }, thunkAPI) => {
 
     return todolistsAPI.deleteTask(param.todolistId, param.taskId)
         .then(res => {
@@ -51,6 +53,7 @@ const slice = createSlice({
             }
         },*/
         addTaskAC: (state, action: PayloadAction<{ task: TaskType }>) => {
+            console.log("reducers addTaskAC",action)
             state[action.payload.task.todoListId].unshift(action.payload.task)
         },
         updateTaskAC: (state, action: PayloadAction<{ taskId: string, model: UpdateDomainTaskModelType, todolistId: string }>) => {
@@ -86,16 +89,17 @@ const slice = createSlice({
             })
             .addCase(removeTaskTC.fulfilled, (state, action) => {
                 //todolistId можно взять из action.meta.arg и action.payload
-               const tasks = state[action.meta.arg.todolistId]
+                const tasks = state[action.meta.arg.todolistId]
                 const index = tasks.findIndex(t => t.id === action.meta.arg.taskId)
                 if (index > -1) {
                     tasks.splice(index, 1)
                 }
             })
-    }})
+    }
+})
 
 export const tasksReducer = slice.reducer
-export const { addTaskAC, updateTaskAC} = slice.actions
+export const {addTaskAC, updateTaskAC} = slice.actions
 
 
 /*//thunks

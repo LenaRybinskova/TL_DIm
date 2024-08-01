@@ -2,9 +2,8 @@ import {FormControl} from '@material-ui/core';
 import {Button, Checkbox, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@mui/material';
 import React from 'react';
 import {FormikHelpers, useFormik} from 'formik';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {loginTC} from './auth-reducer';
-import {ThunkDispatch} from 'redux-thunk';
 import {AppRootStateType, useAppDispatch} from '../../app/store';
 import {Navigate} from 'react-router-dom';
 
@@ -16,8 +15,9 @@ type FormValues = {
 }
 
 export const Login: React.FC = () => {
-/*        const dispatch = useAppDispatch()*/
-    const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()
+
+    /*    const dispatch: ThunkDispatch<AppRootStateType, any, any> = useDispatch()*/
+    const dispatch = useAppDispatch()
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
 
     const formik = useFormik({
@@ -27,25 +27,20 @@ export const Login: React.FC = () => {
         // когда мы что то в инпуты вводим, сюда кажд новая буква будет приходить в новом объекте values
         validate: (values) => {
             //если в values.email ничего нет
-            if (!values.email) {
-                return {email: 'email is required'}
-            }
-            if (!values.password) {
-                return {password: 'password is required'}
-            }
+            if (!values.email) return {email: 'email is required'}
+            if (!values.password) return {password: 'password is required'}
         },
 
         // onSubmit это коллбек(formik.handleSubmit), в который форма собрала  в values все значения введеные в инпуты
         onSubmit: async (values, formikHelpers: FormikHelpers<FormValues>) => {
             const action = await dispatch(loginTC(values))
             /*if (action.type === loginTC.rejected.type)*/// сравнение обычное. просто с исп утилитного метода match
-            console.log('action', action)
+            console.log("по реджекту  на ЮЙ")
             if (loginTC.rejected.match(action)) {
-                console.log('сюда попали')
                 if (action.payload?.fieldsErrors?.length) {
-                    const err = action.payload?.fieldsErrors[0]
-                    console.log('err', err)
-                    /*                formikHelpers.setFieldError('email', 'some error')*/
+                    console.log("action на ЮЙ", action)
+                    const err = action.payload?.fieldsErrors[0];
+                    /* formikHelpers.setFieldError('email', 'some error')*/
                     formikHelpers.setFieldError(err.field, err.error)
                 }
             } else {
@@ -56,7 +51,6 @@ export const Login: React.FC = () => {
 
     //залогинена? редирект на гл страницу
     if (isLoggedIn) {
-        console.log('isLoggedIn', isLoggedIn)
         return (<Navigate to="/"/>)
     }
 
@@ -96,3 +90,6 @@ export const Login: React.FC = () => {
         </Grid>
     )
 }
+
+
+

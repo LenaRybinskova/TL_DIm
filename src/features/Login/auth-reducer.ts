@@ -9,7 +9,13 @@ import {clearDataAC} from '../Todolists/todolists-reducer';
 const initialState = {
     isLoggedIn: false
 }
-export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType, { rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> } }>('auth/login', async (param, thunkAPI) => {
+
+type AsyncThunkConfig = {
+    rejectValue: { errors: Array<string>, fieldsErrors?: Array<FieldErrorType> };
+};
+
+export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType,AsyncThunkConfig >
+('auth/login', async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({status: 'loading'}))//вкл крутилка
     try {
         const res = await authAPI.login(param)
@@ -17,17 +23,14 @@ export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType
             thunkAPI.dispatch(setAppStatusAC({status: 'succeeded'})) //выкл крутилка
             return {isLoggedIn: true} //залогин
         } else {
-            console.log('try else')
+            console.log("else ",res )
             handleServerAppError(res.data, thunkAPI.dispatch)
-            return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsError})
+            return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
         }
     } catch (error) {
-        console.log('catch')
         handleServerNetworkError(error as Error, thunkAPI.dispatch)
         return thunkAPI.rejectWithValue({errors: [(error as Error).message], fieldsErrors: undefined})
     }
-
-
 })
 
 
